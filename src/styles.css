@@ -1,31 +1,29 @@
-@import url("https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap");
 
 :root {
-  color: #1d1b16;
-  background: #fffaf0;
+  color: #0f172a;
+  background: #ffffff;
   font-family:
     Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
     sans-serif;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
-  --ink: #1d1b16;
-  --muted: #6d665c;
-  --sun: #ffbf3f;
-  --tomato: #ff4d2e;
-  --leaf: #0e8f6f;
-  --plum: #4d2d5f;
-  --cream: #fffaf0;
-  --line: rgba(29, 27, 22, 0.12);
-  --shadow: 0 24px 80px rgba(54, 37, 13, 0.18);
-  --depth-1: 0 14px 28px rgba(26, 20, 12, 0.14);
-  --depth-2: 0 26px 56px rgba(26, 20, 12, 0.18);
-  --depth-3: 0 40px 90px rgba(26, 20, 12, 0.22);
-  --card-glass: linear-gradient(
-    160deg,
-    rgba(255, 255, 255, 0.94),
-    rgba(255, 248, 230, 0.78)
-  );
-  --heading-font: "Sora", Inter, ui-sans-serif, system-ui, -apple-system,
+  --ink: #0f172a;
+  --muted: #475569;
+  --sun: #fbbc05;
+  --tomato: #ea4335;
+  --leaf: #34a853;
+  --plum: #4285f4;
+  --cream: #ffffff;
+  --line: rgba(255, 255, 255, 0.3);
+  --shadow: 0 24px 80px rgba(15, 23, 42, 0.12);
+  --depth-1: 0 14px 28px rgba(15, 23, 42, 0.08);
+  --depth-2: 0 26px 56px rgba(15, 23, 42, 0.1);
+  --depth-3: 0 40px 90px rgba(15, 23, 42, 0.14);
+  --card-glass: rgba(255, 255, 255, 0.6);
+  --glass-border: rgba(255, 255, 255, 0.3);
+  --glass-shadow: 0 16px 48px rgba(15, 23, 42, 0.12);
+  --heading-font: Inter, ui-sans-serif, system-ui, -apple-system,
     BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
@@ -42,9 +40,10 @@ body {
   min-width: 320px;
   overflow-x: hidden;
   background:
-    radial-gradient(circle at 14% 8%, rgba(255, 188, 65, 0.22), transparent 30rem),
-    radial-gradient(circle at 82% 16%, rgba(77, 45, 95, 0.14), transparent 30rem),
-    #fffaf0;
+    radial-gradient(circle at 12% 10%, rgba(66, 133, 244, 0.12), transparent 26rem),
+    radial-gradient(circle at 88% 18%, rgba(52, 168, 83, 0.1), transparent 24rem),
+    radial-gradient(circle at 52% 78%, rgba(251, 188, 5, 0.09), transparent 28rem),
+    #ffffff;
   perspective: 1400px;
   transform-style: preserve-3d;
 }
@@ -79,6 +78,22 @@ h3,
   font-family: var(--heading-font);
 }
 
+h1,
+h2,
+h3,
+.brand,
+.sectionHead,
+.kicker,
+.heroStats strong,
+.checkoutTop h3,
+.trackingPanel h3,
+.menuInfo h3,
+.restaurantOverlay h3,
+.trackingStatus,
+.authVisual h2 {
+  letter-spacing: -0.02em;
+}
+
 body::selection {
   background: var(--tomato);
   color: white;
@@ -111,9 +126,9 @@ main {
   transform-style: preserve-3d;
   padding-top: 140px;
   background:
-    radial-gradient(circle at 12% 8%, rgba(255, 191, 63, 0.28), transparent 28rem),
-    radial-gradient(circle at 88% 18%, rgba(14, 143, 111, 0.18), transparent 26rem),
-    linear-gradient(180deg, #fffaf0 0%, #fff6e4 44%, #fffaf0 100%);
+    radial-gradient(circle at 12% 8%, rgba(66, 133, 244, 0.08), transparent 28rem),
+    radial-gradient(circle at 88% 18%, rgba(234, 67, 53, 0.06), transparent 26rem),
+    linear-gradient(180deg, #ffffff 0%, #f9fbff 50%, #ffffff 100%);
 }
 
 main::before,
@@ -130,7 +145,7 @@ main::before {
   left: -100px;
   width: 360px;
   height: 360px;
-  background: radial-gradient(circle, rgba(255, 142, 73, 0.36), transparent 72%);
+  background: radial-gradient(circle, rgba(66, 133, 244, 0.18), transparent 72%);
   transform: translateZ(-140px);
 }
 
@@ -139,7 +154,7 @@ main::after {
   right: -110px;
   width: 380px;
   height: 380px;
-  background: radial-gradient(circle, rgba(64, 118, 199, 0.24), transparent 72%);
+  background: radial-gradient(circle, rgba(52, 168, 83, 0.16), transparent 72%);
   transform: translateZ(-180px);
 }
 
@@ -161,11 +176,11 @@ main > * {
   width: min(1180px, calc(100% - 32px));
   margin: 0;
   padding: 20px 0;
-  background: rgba(255, 250, 240, 0.58);
-  border: 1px solid rgba(255, 255, 255, 0.58);
+  background: var(--card-glass);
+  border: 1px solid var(--glass-border);
   border-radius: 20px;
-  box-shadow: 0 16px 44px rgba(29, 27, 22, 0.12);
-  backdrop-filter: blur(16px);
+  box-shadow: var(--glass-shadow);
+  backdrop-filter: blur(12px);
   transform: translateX(-50%) translateZ(42px);
 }
 
@@ -177,8 +192,8 @@ main > * {
   border-radius: inherit;
   background: linear-gradient(
     110deg,
-    rgba(255, 255, 255, 0.76),
-    rgba(255, 255, 255, 0.24)
+    rgba(255, 255, 255, 0.72),
+    rgba(255, 255, 255, 0.2)
   );
 }
 
@@ -194,6 +209,35 @@ main > * {
 .checkoutBtn {
   display: inline-flex;
   align-items: center;
+}
+
+.authCard,
+.authClose,
+.authForm label span,
+.authSwitch,
+.heroBg,
+.heroStats span,
+.floatingCard,
+.menuPanel,
+.checkout,
+.trackingPanel,
+.restaurantCard,
+.menuCard,
+.mapPanel,
+.rewards,
+.searchBar,
+.tabs button,
+.cartItem,
+.quantity,
+.restaurantMenuBtn,
+.accountPill,
+.loginBtn,
+.signupBtn,
+.navCta {
+  background: var(--card-glass);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
 .brand {
@@ -250,8 +294,7 @@ main > * {
   min-width: 58px;
   justify-content: center;
   padding: 12px 15px;
-  color: white;
-  background: var(--ink);
+  color: var(--ink);
   border-radius: 999px;
 }
 
@@ -273,8 +316,6 @@ main > * {
   gap: 8px;
   padding: 0 16px;
   color: var(--ink);
-  background: rgba(255, 255, 255, 0.9);
-  border: 1px solid rgba(29, 27, 22, 0.1);
   box-shadow: var(--depth-1);
   transform: translateZ(16px);
 }
@@ -283,8 +324,8 @@ main > * {
   gap: 8px;
   padding: 0 16px;
   color: white;
-  background: linear-gradient(135deg, var(--tomato), #ff8a00);
-  box-shadow: 0 14px 28px rgba(255, 77, 46, 0.25);
+  background: linear-gradient(135deg, var(--plum), var(--tomato));
+  box-shadow: 0 14px 28px rgba(66, 133, 244, 0.18);
   transform: translateZ(16px);
 }
 
@@ -294,8 +335,6 @@ main > * {
   gap: 8px;
   padding: 5px 6px 5px 13px;
   color: var(--ink);
-  background: rgba(255, 255, 255, 0.9);
-  border: 1px solid rgba(29, 27, 22, 0.1);
   box-shadow: var(--depth-1);
   transform: translateZ(16px);
 }
@@ -386,10 +425,8 @@ main > * {
   grid-template-columns: minmax(260px, 0.9fr) minmax(280px, 1fr);
   width: min(880px, 100%);
   overflow: hidden;
-  background: white;
-  border: 1px solid rgba(255, 255, 255, 0.5);
   border-radius: 28px;
-  box-shadow: 0 32px 90px rgba(29, 27, 22, 0.28);
+  box-shadow: 0 32px 90px rgba(15, 23, 42, 0.18);
   animation: authIn 240ms ease both;
   transform: translateZ(60px) rotateX(2deg);
   transform-style: preserve-3d;
@@ -405,18 +442,18 @@ main > * {
   width: 38px;
   height: 38px;
   color: var(--ink);
-  background: rgba(255, 255, 255, 0.82);
   border-radius: 50%;
 }
 
 .authVisual {
   min-height: 520px;
   padding: 36px;
-  color: white;
+  color: var(--ink);
   background:
-    linear-gradient(145deg, rgba(29, 27, 22, 0.76), rgba(255, 77, 46, 0.58)),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.42)),
     url("https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=1200&q=80")
       center/cover;
+  border-right: 1px solid var(--glass-border);
   transform: translateZ(34px);
 }
 
@@ -444,7 +481,6 @@ main > * {
   grid-template-columns: 1fr 1fr;
   gap: 8px;
   padding: 6px;
-  background: #fff6e4;
   border-radius: 999px;
 }
 
@@ -458,7 +494,7 @@ main > * {
 
 .authSwitch button.active {
   color: white;
-  background: var(--ink);
+  background: var(--plum);
 }
 
 .authForm label {
@@ -476,8 +512,6 @@ main > * {
   min-height: 54px;
   padding: 0 14px;
   color: var(--muted);
-  background: #fffaf0;
-  border: 1px solid rgba(29, 27, 22, 0.1);
   border-radius: 16px;
 }
 
@@ -502,7 +536,7 @@ main > * {
   gap: 10px;
   min-height: 52px;
   color: white;
-  background: linear-gradient(135deg, var(--tomato), #ff8a00);
+  background: linear-gradient(135deg, var(--plum), var(--tomato));
   border-radius: 999px;
   font-weight: 900;
 }
@@ -526,11 +560,11 @@ main > * {
   z-index: 0;
   border-radius: 34px;
   background:
-    linear-gradient(120deg, rgba(255, 255, 255, 0.72), rgba(255, 246, 226, 0.54)),
+    linear-gradient(120deg, rgba(255, 255, 255, 0.74), rgba(255, 255, 255, 0.58)),
     url("https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=2200&q=80")
       center/cover;
   overflow: hidden;
-  box-shadow: var(--depth-3);
+  box-shadow: var(--glass-shadow);
   transform: translateZ(-20px) rotateX(2deg);
 }
 
@@ -538,7 +572,7 @@ main > * {
   position: absolute;
   inset: 0;
   content: "";
-  background: linear-gradient(90deg, rgba(255, 250, 240, 0.95), rgba(255, 250, 240, 0.5) 56%, rgba(255, 250, 240, 0.12));
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.96), rgba(255, 255, 255, 0.62) 56%, rgba(255, 255, 255, 0.14));
 }
 
 .heroContent,
@@ -568,8 +602,6 @@ main > * {
   width: fit-content;
   margin-bottom: 20px;
   padding: 10px 14px;
-  background: rgba(255, 255, 255, 0.72);
-  border: 1px solid rgba(255, 77, 46, 0.16);
   border-radius: 999px;
 }
 
@@ -595,7 +627,7 @@ h2 {
 
 .hero p {
   max-width: 610px;
-  color: #4e483f;
+  color: var(--muted);
   font-size: 1.14rem;
   line-height: 1.7;
 }
@@ -630,8 +662,8 @@ h2 {
 
 .secondaryBtn {
   color: var(--ink);
-  background: rgba(255, 255, 255, 0.82);
-  border: 1px solid rgba(29, 27, 22, 0.1);
+  background: var(--card-glass);
+  border: 1px solid var(--glass-border);
 }
 
 .primaryBtn:hover,
@@ -650,10 +682,8 @@ h2 {
   min-width: 126px;
   padding: 14px 16px;
   color: var(--muted);
-  background: rgba(255, 255, 255, 0.72);
-  border: 1px solid rgba(29, 27, 22, 0.08);
   border-radius: 18px;
-  box-shadow: var(--depth-1);
+  box-shadow: var(--glass-shadow);
   transform: translateZ(18px);
 }
 
@@ -674,8 +704,8 @@ h2 {
   place-items: center;
   border-radius: 46% 54% 42% 58%;
   background:
-    linear-gradient(150deg, rgba(255, 191, 63, 0.92), rgba(255, 77, 46, 0.85)),
-    var(--sun);
+    linear-gradient(150deg, rgba(66, 133, 244, 0.24), rgba(234, 67, 53, 0.16)),
+    rgba(255, 255, 255, 0.72);
   box-shadow: var(--shadow);
   animation: morph 8s ease-in-out infinite;
   transform: translateZ(38px);
@@ -696,10 +726,8 @@ h2 {
   z-index: 2;
   gap: 10px;
   padding: 14px 16px;
-  background: rgba(255, 255, 255, 0.88);
-  border: 1px solid rgba(29, 27, 22, 0.09);
   border-radius: 18px;
-  box-shadow: 0 18px 45px rgba(29, 27, 22, 0.14);
+  box-shadow: var(--glass-shadow);
   animation: cardBob 3.4s ease-in-out infinite;
   transform: translateZ(52px);
 }
@@ -744,10 +772,11 @@ h2 {
   gap: 12px;
   min-height: 76px;
   padding: 0 18px;
-  color: white;
-  background: linear-gradient(150deg, #2a2721, #16140f);
+  color: var(--ink);
+  background: var(--card-glass);
+  border: 1px solid var(--glass-border);
   border-radius: 20px;
-  box-shadow: var(--depth-2);
+  box-shadow: var(--glass-shadow);
   font-weight: 850;
   transform: translateZ(20px);
   transform-style: preserve-3d;
@@ -797,7 +826,9 @@ h2 {
   min-height: 380px;
   overflow: hidden;
   border-radius: 26px;
-  box-shadow: 0 24px 65px rgba(29, 27, 22, 0.16);
+  background: var(--card-glass);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
   animation: riseIn 700ms ease both;
   animation-delay: var(--delay);
   transform-style: preserve-3d;
@@ -820,7 +851,7 @@ h2 {
   position: absolute;
   inset: 0;
   content: "";
-  background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.78));
+  background: linear-gradient(180deg, transparent, rgba(15, 23, 42, 0.58));
 }
 
 .restaurantCard img {
@@ -886,7 +917,6 @@ h2 {
   min-height: 42px;
   padding: 0 15px;
   color: var(--ink);
-  background: rgba(255, 255, 255, 0.9);
   border-radius: 999px;
   font-weight: 900;
   transition:
@@ -910,9 +940,9 @@ h2 {
 .checkout,
 .trackingPanel {
   background: var(--card-glass);
-  border: 1px solid rgba(29, 27, 22, 0.08);
+  border: 1px solid var(--glass-border);
   border-radius: 28px;
-  box-shadow: var(--depth-2);
+  box-shadow: var(--glass-shadow);
   transform-style: preserve-3d;
   transition:
     transform 220ms ease,
@@ -937,8 +967,6 @@ h2 {
   margin-bottom: 16px;
   padding: 0 16px;
   min-height: 58px;
-  background: #fff;
-  border: 1px solid rgba(29, 27, 22, 0.08);
   border-radius: 18px;
 }
 
@@ -965,8 +993,6 @@ h2 {
   flex: 0 0 auto;
   padding: 10px 14px;
   color: var(--muted);
-  background: #fff;
-  border: 1px solid rgba(29, 27, 22, 0.08);
   border-radius: 999px;
   font-weight: 850;
 }
@@ -985,9 +1011,10 @@ h2 {
 .menuCard {
   position: relative;
   overflow: hidden;
-  background: white;
-  border: 1px solid rgba(29, 27, 22, 0.08);
+  background: var(--card-glass);
+  border: 1px solid var(--glass-border);
   border-radius: 22px;
+  box-shadow: var(--glass-shadow);
   transition:
     transform 180ms ease,
     box-shadow 180ms ease;
@@ -1060,7 +1087,7 @@ h2 {
 .quantity {
   gap: 8px;
   padding: 5px;
-  background: #fff6e4;
+  background: var(--card-glass);
   border-radius: 999px;
 }
 
@@ -1109,7 +1136,7 @@ h2 {
   gap: 12px;
   align-items: center;
   padding: 10px;
-  background: white;
+  background: var(--card-glass);
   border-radius: 18px;
 }
 
@@ -1159,7 +1186,7 @@ h2 {
 .checkoutBtn {
   width: 100%;
   color: white;
-  background: var(--ink);
+  background: linear-gradient(135deg, var(--plum), var(--ink));
 }
 
 .checkoutBtn:disabled,
@@ -1180,9 +1207,8 @@ h2 {
   min-height: 520px;
   overflow: hidden;
   border-radius: 30px;
-  background: #e4ebf3;
-  border: 1px solid rgba(255, 255, 255, 0.58);
-  box-shadow: 0 26px 70px rgba(14, 143, 111, 0.16);
+  background: var(--card-glass);
+  box-shadow: var(--glass-shadow);
   transform: translateZ(24px) rotateX(2deg);
 }
 
@@ -1388,14 +1414,14 @@ h2 {
   max-width: min(65%, 320px);
   margin: 0;
   padding: 10px 12px;
-  color: rgba(247, 247, 247, 0.98);
-  background: rgba(0, 0, 0, 0.56);
-  border: 1px solid rgba(255, 255, 255, 0.34);
+  color: var(--ink);
+  background: var(--card-glass);
+  border: 1px solid var(--glass-border);
   border-radius: 12px;
   font-size: 0.78rem;
   font-weight: 700;
   line-height: 1.4;
-  backdrop-filter: blur(8px);
+  backdrop-filter: blur(12px);
 }
 
 .trackingPanel {
@@ -1409,7 +1435,6 @@ h2 {
   margin-bottom: 18px;
   padding: 9px 12px;
   color: var(--muted);
-  background: #fff6e4;
   border-radius: 999px;
   font-size: 0.86rem;
   font-weight: 900;
@@ -1596,18 +1621,18 @@ h2 {
   gap: 24px;
   margin-bottom: 64px;
   padding: 36px;
-  color: white;
+  color: var(--ink);
   background:
-    linear-gradient(120deg, rgba(29, 27, 22, 0.82), rgba(29, 27, 22, 0.62)),
+    linear-gradient(120deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.5)),
     url("https://images.unsplash.com/photo-1551218808-94e220e084d2?auto=format&fit=crop&w=1800&q=80")
       center/cover;
   border-radius: 30px;
-  box-shadow: var(--depth-3);
+  box-shadow: var(--glass-shadow);
   transform: translateZ(38px) rotateX(2deg);
 }
 
 .rewards .kicker {
-  color: var(--sun);
+  color: var(--plum);
 }
 
 .rewards h2 {

@@ -1,7 +1,5 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
-import Particles, { initParticlesEngine } from "@tsparticles/react";
-import { loadSlim } from "@tsparticles/slim";
 import {
   Bike,
   ChefHat,
@@ -29,115 +27,229 @@ import {
   Zap
 } from "lucide-react";
 import "./styles.css";
+import appIcon from "./assets/app-icon.svg";
 
 const usersStorageKey = "flashfeast-users";
 const sessionStorageKey = "flashfeast-user";
 
 function ParticleBackground() {
-  const [ready, setReady] = useState(false);
+  const canvasRef = useRef(null);
+  const pointerRef = useRef({ x: 0, y: 0, active: false, lastMove: 0 });
 
   useEffect(() => {
-    initParticlesEngine(async (engine) => {
-      await loadSlim(engine);
-    }).then(() => {
-      setReady(true);
-    });
+    const canvas = canvasRef.current;
+    if (!canvas) {
+      return undefined;
+    }
+
+    const ctx = canvas.getContext("2d", { alpha: true, desynchronized: true });
+    if (!ctx) {
+      return undefined;
+    }
+
+    let width = 0;
+    let height = 0;
+    let dpr = 1;
+    let animationFrameId = 0;
+
+    const maxDpr = 2;
+    const baseSpeed = 1.2;
+    const gravityRadius = 150;
+    const gravityRadiusSq = gravityRadius * gravityRadius;
+    const gravityStrength = 140;
+    const noiseScale = 0.0022;
+    const flowInfluence = 0.08;
+    const flowInfluenceNear = 0.04;
+    const maxSpeed = 3.2;
+    const idleTimeout = 260;
+    const margin = 12;
+
+    const palette = [
+      [66, 133, 244],
+      [234, 67, 53],
+      [251, 188, 5],
+      [52, 168, 83]
+    ];
+
+    const perm = new Uint8Array(512);
+    const p = new Uint8Array(256);
+    for (let i = 0; i < 256; i += 1) {
+      p[i] = i;
+    }
+    for (let i = 255; i > 0; i -= 1) {
+      const j = Math.floor(Math.random() * (i + 1));
+      const swap = p[i];
+      p[i] = p[j];
+      p[j] = swap;
+    }
+    for (let i = 0; i < 512; i += 1) {
+      perm[i] = p[i & 255];
+    }
+
+    function fade(t) {
+      return t * t * t * (t * (t * 6 - 15) + 10);
+    }
+
+    function lerp(a, b, t) {
+      return a + (b - a) * t;
+    }
+
+    function grad(hash, x, y) {
+      const h = hash & 3;
+      if (h === 0) return x + y;
+      if (h === 1) return -x + y;
+      if (h === 2) return x - y;
+      return -x - y;
+    }
+
+    function noise2D(x, y) {
+      const xi = Math.floor(x) & 255;
+      const yi = Math.floor(y) & 255;
+      const xf = x - Math.floor(x);
+      const yf = y - Math.floor(y);
+      const u = fade(xf);
+      const v = fade(yf);
+
+      const aa = perm[xi + perm[yi]];
+      const ab = perm[xi + perm[yi + 1]];
+      const ba = perm[xi + 1 + perm[yi]];
+      const bb = perm[xi + 1 + perm[yi + 1]];
+
+      const x1 = lerp(grad(aa, xf, yf), grad(ba, xf - 1, yf), u);
+      const x2 = lerp(grad(ab, xf, yf - 1), grad(bb, xf - 1, yf - 1), u);
+      return lerp(x1, x2, v);
+    }
+
+    const particles = [];
+
+    function seedParticles() {
+      particles.length = 0;
+      const area = Math.max(1, width * height);
+      const count = Math.min(240, Math.max(120, Math.floor(area / 9000)));
+      for (let i = 0; i < count; i += 1) {
+        const angle = Math.random() * Math.PI * 2;
+        const color = palette[Math.floor(Math.random() * palette.length)];
+        particles.push({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          vx: Math.cos(angle) * baseSpeed,
+          vy: Math.sin(angle) * baseSpeed,
+          size: 1 + Math.random() * 2,
+          color
+        });
+      }
+    }
+
+    function resize() {
+      const rect = canvas.getBoundingClientRect();
+      width = rect.width;
+      height = rect.height;
+      dpr = Math.min(window.devicePixelRatio || 1, maxDpr);
+      canvas.width = Math.max(1, Math.floor(width * dpr));
+      canvas.height = Math.max(1, Math.floor(height * dpr));
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.imageSmoothingEnabled = true;
+      seedParticles();
+    }
+
+    function handlePointerMove(event) {
+      const rect = canvas.getBoundingClientRect();
+      pointerRef.current.x = event.clientX - rect.left;
+      pointerRef.current.y = event.clientY - rect.top;
+      pointerRef.current.active = true;
+      pointerRef.current.lastMove = performance.now();
+    }
+
+    window.addEventListener("pointermove", handlePointerMove, { passive: true });
+    window.addEventListener("pointerdown", handlePointerMove, { passive: true });
+    window.addEventListener("resize", resize);
+
+    resize();
+
+    let lastTime = performance.now();
+
+    function tick(time) {
+      const delta = Math.min(32, time - lastTime);
+      lastTime = time;
+      const pointer = pointerRef.current;
+      if (pointer.active && time - pointer.lastMove > idleTimeout) {
+        pointer.active = false;
+      }
+
+      const timeOffset = time * 0.00008;
+      ctx.clearRect(0, 0, width, height);
+
+      for (let i = 0; i < particles.length; i += 1) {
+        const particle = particles[i];
+        const flowAngle = noise2D(
+          particle.x * noiseScale + timeOffset,
+          particle.y * noiseScale - timeOffset
+        ) * Math.PI * 2;
+
+        const targetVx = Math.cos(flowAngle) * baseSpeed;
+        const targetVy = Math.sin(flowAngle) * baseSpeed;
+        const influence = pointer.active ? flowInfluenceNear : flowInfluence;
+        particle.vx += (targetVx - particle.vx) * influence;
+        particle.vy += (targetVy - particle.vy) * influence;
+
+        let opacity = 0.3;
+        let distSq = Number.POSITIVE_INFINITY;
+        if (pointer.active) {
+          const dx = pointer.x - particle.x;
+          const dy = pointer.y - particle.y;
+          distSq = dx * dx + dy * dy;
+          if (distSq < gravityRadiusSq) {
+            const dist = Math.sqrt(distSq) || 1;
+            const force = gravityStrength / (distSq + 60);
+            particle.vx += (dx / dist) * force;
+            particle.vy += (dy / dist) * force;
+            particle.vx *= 0.88;
+            particle.vy *= 0.88;
+            opacity = 0.3 + (1 - dist / gravityRadius) * 0.4;
+          }
+        }
+
+        const speed = Math.hypot(particle.vx, particle.vy) || 1;
+        if (!pointer.active || distSq >= gravityRadiusSq) {
+          particle.vx = (particle.vx / speed) * baseSpeed;
+          particle.vy = (particle.vy / speed) * baseSpeed;
+        } else if (speed > maxSpeed) {
+          const scale = maxSpeed / speed;
+          particle.vx *= scale;
+          particle.vy *= scale;
+        }
+
+        particle.x += particle.vx * (delta / 16.6);
+        particle.y += particle.vy * (delta / 16.6);
+
+        if (particle.x < -margin) particle.x = width + margin;
+        if (particle.x > width + margin) particle.x = -margin;
+        if (particle.y < -margin) particle.y = height + margin;
+        if (particle.y > height + margin) particle.y = -margin;
+
+        const [r, g, b] = particle.color;
+        ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${opacity})`;
+        ctx.beginPath();
+        ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      animationFrameId = window.requestAnimationFrame(tick);
+    }
+
+    animationFrameId = window.requestAnimationFrame(tick);
+
+    return () => {
+      window.cancelAnimationFrame(animationFrameId);
+      window.removeEventListener("pointermove", handlePointerMove);
+      window.removeEventListener("pointerdown", handlePointerMove);
+      window.removeEventListener("resize", resize);
+    };
   }, []);
-
-  const options = useMemo(
-    () => ({
-      background: {
-        color: "#ffffff"
-      },
-      fullScreen: {
-        enable: false
-      },
-      detectRetina: false,
-      fpsLimit: 120,
-      interactivity: {
-        detectsOn: "window",
-        events: {
-          onHover: {
-            enable: true,
-            mode: "repulse"
-          },
-          resize: {
-            enable: true,
-            delay: 0.5
-          }
-        },
-        modes: {
-          repulse: {
-            distance: 95,
-            duration: 0.8,
-            easing: "ease-out-quad",
-            speed: 0.8,
-            factor: 90,
-            maxSpeed: 20
-          }
-        }
-      },
-      particles: {
-        color: {
-          value: ["#4285F4", "#EA4335", "#FBBC05", "#34A853"]
-        },
-        links: {
-          enable: false
-        },
-        number: {
-          value: 84,
-          density: {
-            enable: true,
-            width: 1440,
-            height: 900
-          }
-        },
-        opacity: {
-          value: 0.95
-        },
-        shape: {
-          type: "circle"
-        },
-        size: {
-          value: { min: 1.2, max: 2.6 }
-        },
-        move: {
-          enable: true,
-          speed: 4.2,
-          direction: "none",
-          random: true,
-          straight: false,
-          outModes: {
-            default: "out"
-          }
-        }
-      },
-      responsive: [
-        {
-          maxWidth: 900,
-          options: {
-            particles: {
-              number: {
-                value: 80
-              },
-              move: {
-                speed: 3.2
-              }
-            }
-          }
-        }
-      ]
-    }),
-    []
-  );
-
-  if (!ready) {
-    return null;
-  }
 
   return (
     <div className="particleLayer" aria-hidden="true">
-      <Particles id="app-particles" options={options} className="particleCanvas" />
+      <canvas ref={canvasRef} className="particleCanvas" />
     </div>
   );
 }
@@ -180,7 +292,7 @@ function LoginPage({ onBack, onOpenSignup, onSubmit }) {
         <div className="authCard authPageCard">
           <div className="authVisual">
             <span className="brandMark">
-              <Zap size={22} />
+              <img src={appIcon} alt="FlashFeast" />
             </span>
             <h2>Welcome back to FlashFeast</h2>
             <p>Sign in to place orders, track deliveries live, and manage your account.</p>
@@ -258,7 +370,7 @@ function SignupPage({ onBack, onOpenLogin, onSubmit }) {
         <div className="authCard authPageCard">
           <div className="authVisual">
             <span className="brandMark">
-              <Zap size={22} />
+              <img src={appIcon} alt="FlashFeast" />
             </span>
             <h2>Create your FlashFeast account</h2>
             <p>Join now to save your details and order from local kitchens faster.</p>
@@ -1272,12 +1384,6 @@ function imageForDish(dishName, sectionName) {
   return onlineDishImage(dishName, sectionName);
 }
 
-function sourceForImage(image) {
-  return image.includes("Special:FilePath/")
-    ? image.replace("Special:FilePath/", "File:").replace(/\?width=\d+$/, "")
-    : image;
-}
-
 function formatRating(value) {
   return Number(value).toFixed(1);
 }
@@ -1694,7 +1800,7 @@ function App() {
       <header className="nav">
         <a className="brand" href="#top" aria-label="FlashFeast home">
           <span className="brandMark">
-            <Zap size={22} />
+            <img src={appIcon} alt="FlashFeast" />
           </span>
           FlashFeast
         </a>
@@ -1911,14 +2017,6 @@ function App() {
                         {item.time}
                       </span>
                     </div>
-                    <a
-                      className="imageSource"
-                      href={sourceForImage(item.image)}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      Open matched photo
-                    </a>
                     <div className="menuFooter">
                       <strong>{currency(item.price)}</strong>
                       <div className="quantity">
