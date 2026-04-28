@@ -1,0 +1,2081 @@
+@import url("https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800;900&display=swap");
+
+:root {
+  color: #1d1b16;
+  background: #fffaf0;
+  font-family:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  --ink: #1d1b16;
+  --muted: #6d665c;
+  --sun: #ffbf3f;
+  --tomato: #ff4d2e;
+  --leaf: #0e8f6f;
+  --plum: #4d2d5f;
+  --cream: #fffaf0;
+  --line: rgba(29, 27, 22, 0.12);
+  --shadow: 0 24px 80px rgba(54, 37, 13, 0.18);
+  --depth-1: 0 14px 28px rgba(26, 20, 12, 0.14);
+  --depth-2: 0 26px 56px rgba(26, 20, 12, 0.18);
+  --depth-3: 0 40px 90px rgba(26, 20, 12, 0.22);
+  --card-glass: linear-gradient(
+    160deg,
+    rgba(255, 255, 255, 0.94),
+    rgba(255, 248, 230, 0.78)
+  );
+  --heading-font: "Sora", Inter, ui-sans-serif, system-ui, -apple-system,
+    BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  overflow-x: hidden;
+  background:
+    radial-gradient(circle at 14% 8%, rgba(255, 188, 65, 0.22), transparent 30rem),
+    radial-gradient(circle at 82% 16%, rgba(77, 45, 95, 0.14), transparent 30rem),
+    #fffaf0;
+  perspective: 1400px;
+  transform-style: preserve-3d;
+}
+
+.particleLayer {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.particleCanvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.brand,
+h1,
+h2,
+h3,
+.sectionHead,
+.kicker,
+.heroStats strong,
+.checkoutTop h3,
+.trackingPanel h3,
+.menuInfo h3,
+.restaurantOverlay h3,
+.trackingStatus,
+.authVisual h2 {
+  font-family: var(--heading-font);
+}
+
+body::selection {
+  background: var(--tomato);
+  color: white;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button {
+  border: 0;
+  cursor: pointer;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+main {
+  position: relative;
+  isolation: isolate;
+  z-index: 1;
+  transform-style: preserve-3d;
+  padding-top: 140px;
+  background:
+    radial-gradient(circle at 12% 8%, rgba(255, 191, 63, 0.28), transparent 28rem),
+    radial-gradient(circle at 88% 18%, rgba(14, 143, 111, 0.18), transparent 26rem),
+    linear-gradient(180deg, #fffaf0 0%, #fff6e4 44%, #fffaf0 100%);
+}
+
+main::before,
+main::after {
+  position: absolute;
+  content: "";
+  pointer-events: none;
+  filter: blur(1px);
+  opacity: 0.7;
+}
+
+main::before {
+  top: 220px;
+  left: -100px;
+  width: 360px;
+  height: 360px;
+  background: radial-gradient(circle, rgba(255, 142, 73, 0.36), transparent 72%);
+  transform: translateZ(-140px);
+}
+
+main::after {
+  top: 860px;
+  right: -110px;
+  width: 380px;
+  height: 380px;
+  background: radial-gradient(circle, rgba(64, 118, 199, 0.24), transparent 72%);
+  transform: translateZ(-180px);
+}
+
+main > * {
+  position: relative;
+  z-index: 2;
+  transform-style: preserve-3d;
+}
+
+.nav {
+  position: fixed;
+  top: 50px;
+  left: 50%;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  width: min(1180px, calc(100% - 32px));
+  margin: 0;
+  padding: 20px 0;
+  background: rgba(255, 250, 240, 0.58);
+  border: 1px solid rgba(255, 255, 255, 0.58);
+  border-radius: 20px;
+  box-shadow: 0 16px 44px rgba(29, 27, 22, 0.12);
+  backdrop-filter: blur(16px);
+  transform: translateX(-50%) translateZ(42px);
+}
+
+.nav::before {
+  position: absolute;
+  inset: -1px;
+  z-index: -1;
+  content: "";
+  border-radius: inherit;
+  background: linear-gradient(
+    110deg,
+    rgba(255, 255, 255, 0.76),
+    rgba(255, 255, 255, 0.24)
+  );
+}
+
+.brand,
+.navCta,
+.loginBtn,
+.signupBtn,
+.feature,
+.eyebrow,
+.primaryBtn,
+.secondaryBtn,
+.quantity,
+.checkoutBtn {
+  display: inline-flex;
+  align-items: center;
+}
+
+.brand {
+  gap: 10px;
+  font-size: 1.2rem;
+  font-weight: 900;
+}
+
+.brandMark,
+.bagIcon {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 14px;
+  color: white;
+  background: linear-gradient(135deg, var(--tomato), var(--sun));
+  box-shadow:
+    inset 0 2px 8px rgba(255, 255, 255, 0.26),
+    0 12px 24px rgba(255, 77, 46, 0.28);
+  transform: translateZ(22px);
+}
+
+.nav nav {
+  display: flex;
+  gap: 24px;
+  color: var(--muted);
+  font-weight: 750;
+}
+
+.nav nav a {
+  position: relative;
+}
+
+.nav nav a::after {
+  position: absolute;
+  right: 0;
+  bottom: -8px;
+  left: 0;
+  height: 2px;
+  content: "";
+  background: var(--tomato);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 180ms ease;
+}
+
+.nav nav a:hover::after {
+  transform: scaleX(1);
+}
+
+.navCta {
+  gap: 8px;
+  min-width: 58px;
+  justify-content: center;
+  padding: 12px 15px;
+  color: white;
+  background: var(--ink);
+  border-radius: 999px;
+}
+
+.navActions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.loginBtn,
+.signupBtn,
+.accountPill {
+  min-height: 46px;
+  border-radius: 999px;
+  font-weight: 900;
+}
+
+.loginBtn {
+  gap: 8px;
+  padding: 0 16px;
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(29, 27, 22, 0.1);
+  box-shadow: var(--depth-1);
+  transform: translateZ(16px);
+}
+
+.signupBtn {
+  gap: 8px;
+  padding: 0 16px;
+  color: white;
+  background: linear-gradient(135deg, var(--tomato), #ff8a00);
+  box-shadow: 0 14px 28px rgba(255, 77, 46, 0.25);
+  transform: translateZ(16px);
+}
+
+.accountPill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 6px 5px 13px;
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(29, 27, 22, 0.1);
+  box-shadow: var(--depth-1);
+  transform: translateZ(16px);
+}
+
+.accountPill span {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  max-width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.accountPill button {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  color: white;
+  background: var(--ink);
+  border-radius: 50%;
+}
+
+.authPageMain {
+  position: relative;
+  min-height: 100vh;
+}
+
+.authPage {
+  position: relative;
+  z-index: 4;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  width: min(980px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 36px 0;
+}
+
+.authPageCard {
+  width: 100%;
+}
+
+.authHintText {
+  margin: 2px 0 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+  font-weight: 800;
+}
+
+.authLinkBtn {
+  margin-left: 8px;
+  color: var(--tomato);
+  font-weight: 900;
+  text-decoration: underline;
+}
+
+.authBackBtn {
+  min-height: 46px;
+  color: var(--ink);
+  background: rgba(29, 27, 22, 0.08);
+  border: 1px solid rgba(29, 27, 22, 0.14);
+  border-radius: 999px;
+  font-weight: 900;
+}
+
+.authOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  place-items: center;
+  padding: 18px;
+}
+
+.authBackdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(29, 27, 22, 0.5);
+  backdrop-filter: blur(14px);
+}
+
+.authCard {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(260px, 0.9fr) minmax(280px, 1fr);
+  width: min(880px, 100%);
+  overflow: hidden;
+  background: white;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 28px;
+  box-shadow: 0 32px 90px rgba(29, 27, 22, 0.28);
+  animation: authIn 240ms ease both;
+  transform: translateZ(60px) rotateX(2deg);
+  transform-style: preserve-3d;
+}
+
+.authClose {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.82);
+  border-radius: 50%;
+}
+
+.authVisual {
+  min-height: 520px;
+  padding: 36px;
+  color: white;
+  background:
+    linear-gradient(145deg, rgba(29, 27, 22, 0.76), rgba(255, 77, 46, 0.58)),
+    url("https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=1200&q=80")
+      center/cover;
+  transform: translateZ(34px);
+}
+
+.authVisual h2 {
+  margin: 86px 0 16px;
+  font-size: clamp(2rem, 4vw, 3.6rem);
+}
+
+.authVisual p {
+  max-width: 360px;
+  margin-bottom: 0;
+  line-height: 1.7;
+}
+
+.authForm {
+  display: grid;
+  align-content: center;
+  gap: 16px;
+  padding: 38px;
+  transform: translateZ(24px);
+}
+
+.authSwitch {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  padding: 6px;
+  background: #fff6e4;
+  border-radius: 999px;
+}
+
+.authSwitch button {
+  min-height: 42px;
+  color: var(--muted);
+  background: transparent;
+  border-radius: 999px;
+  font-weight: 900;
+}
+
+.authSwitch button.active {
+  color: white;
+  background: var(--ink);
+}
+
+.authForm label {
+  display: grid;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 0.9rem;
+  font-weight: 900;
+}
+
+.authForm label span {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 54px;
+  padding: 0 14px;
+  color: var(--muted);
+  background: #fffaf0;
+  border: 1px solid rgba(29, 27, 22, 0.1);
+  border-radius: 16px;
+}
+
+.authForm input {
+  width: 100%;
+  border: 0;
+  outline: 0;
+  color: var(--ink);
+  background: transparent;
+}
+
+.authError {
+  margin: 0;
+  color: #b42318;
+  font-weight: 800;
+}
+
+.authSubmit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 52px;
+  color: white;
+  background: linear-gradient(135deg, var(--tomato), #ff8a00);
+  border-radius: 999px;
+  font-weight: 900;
+}
+
+.hero {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 0.88fr);
+  align-items: center;
+  gap: 38px;
+  width: min(1180px, calc(100% - 32px));
+  min-height: calc(100vh - 76px);
+  margin: 0 auto;
+  padding: 54px 0 68px;
+  transform-style: preserve-3d;
+}
+
+.heroBg {
+  position: absolute;
+  inset: 24px -4vw 48px;
+  z-index: 0;
+  border-radius: 34px;
+  background:
+    linear-gradient(120deg, rgba(255, 255, 255, 0.72), rgba(255, 246, 226, 0.54)),
+    url("https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=2200&q=80")
+      center/cover;
+  overflow: hidden;
+  box-shadow: var(--depth-3);
+  transform: translateZ(-20px) rotateX(2deg);
+}
+
+.heroBg::after {
+  position: absolute;
+  inset: 0;
+  content: "";
+  background: linear-gradient(90deg, rgba(255, 250, 240, 0.95), rgba(255, 250, 240, 0.5) 56%, rgba(255, 250, 240, 0.12));
+}
+
+.heroContent,
+.heroStage {
+  position: relative;
+  z-index: 1;
+}
+
+.heroContent {
+  transform: translateZ(36px);
+}
+
+.heroStage {
+  transform: translateZ(56px);
+}
+
+.eyebrow,
+.kicker {
+  color: var(--tomato);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0;
+}
+
+.eyebrow {
+  gap: 8px;
+  width: fit-content;
+  margin-bottom: 20px;
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(255, 77, 46, 0.16);
+  border-radius: 999px;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin-top: 0;
+}
+
+h1 {
+  max-width: 780px;
+  margin-bottom: 20px;
+  font-size: clamp(3.1rem, 8vw, 7.2rem);
+  line-height: 0.92;
+}
+
+h2 {
+  margin-bottom: 0;
+  font-size: clamp(2.1rem, 4vw, 4.4rem);
+  line-height: 1;
+}
+
+.hero p {
+  max-width: 610px;
+  color: #4e483f;
+  font-size: 1.14rem;
+  line-height: 1.7;
+}
+
+.heroActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin: 32px 0;
+}
+
+.primaryBtn,
+.secondaryBtn,
+.checkoutBtn {
+  justify-content: center;
+  gap: 10px;
+  min-height: 52px;
+  padding: 0 22px;
+  border-radius: 999px;
+  font-weight: 900;
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease,
+    background 180ms ease;
+}
+
+.primaryBtn {
+  color: white;
+  background: linear-gradient(135deg, var(--tomato), #ff8a00);
+  box-shadow: 0 18px 40px rgba(255, 77, 46, 0.3);
+}
+
+.secondaryBtn {
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid rgba(29, 27, 22, 0.1);
+}
+
+.primaryBtn:hover,
+.secondaryBtn:hover,
+.checkoutBtn:hover {
+  transform: translateY(-3px);
+}
+
+.heroStats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.heroStats span {
+  min-width: 126px;
+  padding: 14px 16px;
+  color: var(--muted);
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(29, 27, 22, 0.08);
+  border-radius: 18px;
+  box-shadow: var(--depth-1);
+  transform: translateZ(18px);
+}
+
+.heroStats strong {
+  display: block;
+  color: var(--ink);
+  font-size: 1.4rem;
+}
+
+.heroStage {
+  min-height: 570px;
+}
+
+.dishOrbit {
+  position: absolute;
+  inset: 58px 26px 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 46% 54% 42% 58%;
+  background:
+    linear-gradient(150deg, rgba(255, 191, 63, 0.92), rgba(255, 77, 46, 0.85)),
+    var(--sun);
+  box-shadow: var(--shadow);
+  animation: morph 8s ease-in-out infinite;
+  transform: translateZ(38px);
+}
+
+.dishOrbit img {
+  width: min(82%, 420px);
+  aspect-ratio: 1;
+  object-fit: cover;
+  border: 12px solid rgba(255, 255, 255, 0.88);
+  border-radius: 50%;
+  box-shadow: 0 30px 80px rgba(29, 27, 22, 0.24);
+  animation: plateFloat 5s ease-in-out infinite;
+}
+
+.floatingCard {
+  position: absolute;
+  z-index: 2;
+  gap: 10px;
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.88);
+  border: 1px solid rgba(29, 27, 22, 0.09);
+  border-radius: 18px;
+  box-shadow: 0 18px 45px rgba(29, 27, 22, 0.14);
+  animation: cardBob 3.4s ease-in-out infinite;
+  transform: translateZ(52px);
+}
+
+.floatingCard strong {
+  display: block;
+}
+
+.etaCard {
+  top: 96px;
+  right: 0;
+}
+
+.riderCard {
+  bottom: 94px;
+  left: 0;
+  animation-delay: -1.2s;
+}
+
+.pulseRing {
+  position: absolute;
+  right: 68px;
+  bottom: 64px;
+  width: 140px;
+  height: 140px;
+  border: 2px solid rgba(14, 143, 111, 0.35);
+  border-radius: 50%;
+  animation: pulse 2.4s ease-out infinite;
+}
+
+.featureStrip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+  width: min(1180px, calc(100% - 32px));
+  margin: -26px auto 74px;
+  position: relative;
+  z-index: 2;
+}
+
+.feature {
+  gap: 12px;
+  min-height: 76px;
+  padding: 0 18px;
+  color: white;
+  background: linear-gradient(150deg, #2a2721, #16140f);
+  border-radius: 20px;
+  box-shadow: var(--depth-2);
+  font-weight: 850;
+  transform: translateZ(20px);
+  transform-style: preserve-3d;
+  transition: transform 220ms ease;
+}
+
+.feature:hover {
+  transform: translateZ(30px) rotateX(6deg);
+}
+
+.section,
+.menuSection,
+.tracking,
+.rewards {
+  width: min(1180px, calc(100% - 32px));
+  margin: 0 auto;
+}
+
+.section,
+.menuSection,
+.tracking {
+  padding: 64px 0;
+}
+
+.sectionHead {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 30px;
+}
+
+.kicker {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 0.78rem;
+}
+
+.restaurantGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 18px;
+}
+
+.restaurantCard {
+  position: relative;
+  min-height: 380px;
+  overflow: hidden;
+  border-radius: 26px;
+  box-shadow: 0 24px 65px rgba(29, 27, 22, 0.16);
+  animation: riseIn 700ms ease both;
+  animation-delay: var(--delay);
+  transform-style: preserve-3d;
+  transition:
+    transform 260ms ease,
+    box-shadow 260ms ease;
+}
+
+.restaurantCard::before {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  content: "";
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.4), transparent 42%);
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
+.restaurantCard::after {
+  position: absolute;
+  inset: 0;
+  content: "";
+  background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.78));
+}
+
+.restaurantCard img {
+  width: 100%;
+  height: 100%;
+  min-height: 380px;
+  object-fit: cover;
+  transition: transform 500ms ease;
+}
+
+.restaurantCard:hover img {
+  transform: scale(1.08) translateZ(28px);
+}
+
+.restaurantCard:hover {
+  transform: translateY(-8px) rotateX(5deg) rotateY(-3deg);
+  box-shadow: var(--depth-3);
+}
+
+.restaurantOverlay {
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
+  left: 20px;
+  z-index: 1;
+  color: white;
+  transform: translateZ(44px);
+}
+
+.restaurantOverlay span {
+  display: inline-block;
+  margin-bottom: 8px;
+  padding: 7px 10px;
+  background: var(--accent);
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 900;
+}
+
+.restaurantOverlay h3 {
+  margin-bottom: 10px;
+  font-size: 2rem;
+}
+
+.restaurantOverlay div,
+.menuMeta,
+.courier,
+.step {
+  display: flex;
+  align-items: center;
+}
+
+.restaurantOverlay div {
+  gap: 8px 10px;
+  flex-wrap: wrap;
+}
+
+.restaurantMenuBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
+  min-height: 42px;
+  padding: 0 15px;
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 999px;
+  font-weight: 900;
+  transition:
+    transform 180ms ease,
+    background 180ms ease;
+}
+
+.restaurantMenuBtn:hover {
+  transform: translateY(-2px);
+  background: white;
+}
+
+.menuLayout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  gap: 22px;
+  align-items: start;
+}
+
+.menuPanel,
+.checkout,
+.trackingPanel {
+  background: var(--card-glass);
+  border: 1px solid rgba(29, 27, 22, 0.08);
+  border-radius: 28px;
+  box-shadow: var(--depth-2);
+  transform-style: preserve-3d;
+  transition:
+    transform 220ms ease,
+    box-shadow 220ms ease;
+}
+
+.menuPanel:hover,
+.checkout:hover,
+.trackingPanel:hover {
+  transform: translateY(-6px) rotateX(3deg);
+  box-shadow: var(--depth-3);
+}
+
+.menuPanel {
+  padding: 18px;
+}
+
+.searchBar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding: 0 16px;
+  min-height: 58px;
+  background: #fff;
+  border: 1px solid rgba(29, 27, 22, 0.08);
+  border-radius: 18px;
+}
+
+.searchBar input {
+  width: 100%;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--ink);
+}
+
+.tabs {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding-bottom: 12px;
+}
+
+.categoryTabs {
+  margin-bottom: 4px;
+}
+
+.tabs button {
+  flex: 0 0 auto;
+  padding: 10px 14px;
+  color: var(--muted);
+  background: #fff;
+  border: 1px solid rgba(29, 27, 22, 0.08);
+  border-radius: 999px;
+  font-weight: 850;
+}
+
+.tabs button.active {
+  color: white;
+  background: var(--leaf);
+}
+
+.menuGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+}
+
+.menuCard {
+  position: relative;
+  overflow: hidden;
+  background: white;
+  border: 1px solid rgba(29, 27, 22, 0.08);
+  border-radius: 22px;
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease;
+  transform-style: preserve-3d;
+}
+
+.menuCard::before {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  content: "";
+  background: linear-gradient(140deg, rgba(255, 255, 255, 0.36), transparent 40%);
+  pointer-events: none;
+}
+
+.menuCard:hover {
+  transform: translateY(-8px) rotateX(5deg) rotateY(-3deg);
+  box-shadow: var(--depth-2);
+}
+
+.menuCard img {
+  width: 100%;
+  aspect-ratio: 1.65;
+  object-fit: cover;
+}
+
+.menuInfo {
+  padding: 16px;
+}
+
+.menuInfo > span,
+.checkoutTop span,
+.courier span {
+  color: var(--muted);
+  font-size: 0.86rem;
+  font-weight: 800;
+}
+
+.menuInfo h3 {
+  min-height: 52px;
+  margin: 7px 0 12px;
+  font-size: 1.12rem;
+  line-height: 1.2;
+}
+
+.menuMeta {
+  justify-content: space-between;
+  margin-bottom: 16px;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.menuMeta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.menuFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.menuFooter strong {
+  font-size: 1.2rem;
+}
+
+.quantity {
+  gap: 8px;
+  padding: 5px;
+  background: #fff6e4;
+  border-radius: 999px;
+}
+
+.quantity button {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  color: white;
+  background: var(--ink);
+  border-radius: 50%;
+}
+
+.quantity span {
+  min-width: 22px;
+  text-align: center;
+  font-weight: 900;
+}
+
+.checkout {
+  position: sticky;
+  top: 92px;
+  padding: 20px;
+  transform: translateZ(28px);
+}
+
+.checkoutTop {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.checkoutTop h3 {
+  margin-bottom: 0;
+}
+
+.cartList {
+  display: grid;
+  gap: 12px;
+}
+
+.cartItem {
+  display: grid;
+  grid-template-columns: 54px minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: center;
+  padding: 10px;
+  background: white;
+  border-radius: 18px;
+}
+
+.cartItem img {
+  width: 54px;
+  height: 54px;
+  object-fit: cover;
+  border-radius: 15px;
+}
+
+.cartItem strong,
+.cartItem span {
+  display: block;
+}
+
+.cartItem strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cartItem span {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.totals {
+  display: grid;
+  gap: 10px;
+  margin: 18px 0;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+}
+
+.totals span,
+.totals strong {
+  display: flex;
+  justify-content: space-between;
+  color: var(--muted);
+}
+
+.totals strong {
+  color: var(--ink);
+  font-size: 1.18rem;
+}
+
+.checkoutBtn {
+  width: 100%;
+  color: white;
+  background: var(--ink);
+}
+
+.checkoutBtn:disabled,
+.courier button:disabled {
+  cursor: not-allowed;
+  opacity: 0.48;
+  transform: none;
+}
+
+.trackingLayout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
+  gap: 22px;
+}
+
+.mapPanel {
+  position: relative;
+  min-height: 520px;
+  overflow: hidden;
+  border-radius: 30px;
+  background: #e4ebf3;
+  border: 1px solid rgba(255, 255, 255, 0.58);
+  box-shadow: 0 26px 70px rgba(14, 143, 111, 0.16);
+  transform: translateZ(24px) rotateX(2deg);
+}
+
+.mapPanel::before {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  content: "";
+  background: linear-gradient(180deg, rgba(10, 14, 20, 0.12), rgba(10, 14, 20, 0.02) 26%, rgba(10, 14, 20, 0.22));
+  pointer-events: none;
+}
+
+.mapPanel.cancelled::before {
+  background: linear-gradient(180deg, rgba(121, 35, 29, 0.2), rgba(121, 35, 29, 0.04) 26%, rgba(121, 35, 29, 0.26));
+}
+
+.mapPanel.idle::before {
+  background: linear-gradient(180deg, rgba(32, 46, 63, 0.17), rgba(32, 46, 63, 0.04) 26%, rgba(32, 46, 63, 0.22));
+}
+
+.mapFrame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  filter: saturate(1.08) contrast(1.04);
+}
+
+.mapPanel.idle .mapFrame {
+  filter: saturate(0.9) contrast(1.02);
+}
+
+.mapBadge {
+  position: absolute;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  max-width: min(56%, 230px);
+  padding: 10px 12px;
+  color: white;
+  background: rgba(22, 26, 33, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.36);
+  border-radius: 12px;
+  box-shadow: 0 14px 35px rgba(0, 0, 0, 0.24);
+  backdrop-filter: blur(8px);
+  pointer-events: none;
+}
+
+.mapBadge span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.84rem;
+  font-weight: 800;
+}
+
+.mapBadge.restaurant {
+  top: 14px;
+  left: 14px;
+}
+
+.mapBadge.destination {
+  top: 14px;
+  right: 14px;
+  justify-content: flex-end;
+}
+
+.mapRouteOverlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.mapRouteTrail,
+.mapRouteProgress {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.mapRouteTrail {
+  stroke: rgba(255, 255, 255, 0.5);
+  stroke-width: 1.5;
+  stroke-dasharray: 2.6 2.6;
+}
+
+.mapRouteProgress {
+  stroke: #ffbf3f;
+  stroke-width: 1.85;
+  filter: drop-shadow(0 0 8px rgba(255, 191, 63, 0.7));
+  transition: stroke-dasharray 1200ms linear;
+}
+
+.mapLiveRider {
+  position: absolute;
+  z-index: 4;
+  left: var(--rider-x);
+  top: var(--rider-y);
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  transition: left 1200ms linear, top 1200ms linear;
+}
+
+.mapLivePulse {
+  position: absolute;
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  background: rgba(255, 191, 63, 0.34);
+  animation: mapLivePulse 1.7s ease-out infinite;
+}
+
+.mapLivePin {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  color: white;
+  background: linear-gradient(135deg, var(--tomato), var(--sun));
+  border: 2px solid rgba(255, 255, 255, 0.75);
+  border-radius: 50%;
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.3);
+  animation: mapLiveFloat 1200ms ease-in-out infinite alternate;
+}
+
+.mapLiveEta {
+  position: absolute;
+  top: -34px;
+  left: 50%;
+  z-index: 3;
+  min-width: 74px;
+  padding: 4px 10px;
+  color: white;
+  background: rgba(15, 24, 36, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 999px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.22);
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  text-align: center;
+  transform: translateX(-50%);
+}
+
+.mapLiveRider.arrived .mapLivePulse {
+  opacity: 0.35;
+  transform: scale(0.85);
+  animation: none;
+}
+
+.mapLiveRider.arrived .mapLivePin {
+  background: linear-gradient(135deg, #0e8f6f, #2cb67d);
+  animation: none;
+}
+
+.mapLiveRider.arrived .mapLiveEta {
+  background: rgba(14, 143, 111, 0.86);
+}
+
+.mapRiderCard {
+  position: absolute;
+  z-index: 2;
+  bottom: 66px;
+  left: 14px;
+  right: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  color: white;
+  background: rgba(15, 24, 36, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.38);
+  border-radius: 14px;
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.22);
+  backdrop-filter: blur(8px);
+  pointer-events: none;
+}
+
+.mapRiderCard strong {
+  display: block;
+  font-size: 0.9rem;
+}
+
+.mapRiderCard span {
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.mapApiHint {
+  position: absolute;
+  z-index: 2;
+  right: 14px;
+  bottom: 14px;
+  max-width: min(65%, 320px);
+  margin: 0;
+  padding: 10px 12px;
+  color: rgba(247, 247, 247, 0.98);
+  background: rgba(0, 0, 0, 0.56);
+  border: 1px solid rgba(255, 255, 255, 0.34);
+  border-radius: 12px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1.4;
+  backdrop-filter: blur(8px);
+}
+
+.trackingPanel {
+  padding: 22px;
+}
+
+.trackingStatus {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 18px;
+  padding: 9px 12px;
+  color: var(--muted);
+  background: #fff6e4;
+  border-radius: 999px;
+  font-size: 0.86rem;
+  font-weight: 900;
+}
+
+.trackingStatus span {
+  width: 9px;
+  height: 9px;
+  background: #a99b84;
+  border-radius: 50%;
+}
+
+.trackingStatus.live {
+  color: var(--leaf);
+  background: rgba(14, 143, 111, 0.1);
+}
+
+.trackingStatus.live span {
+  background: var(--leaf);
+  box-shadow: 0 0 0 7px rgba(14, 143, 111, 0.14);
+  animation: liveDot 1.4s ease-in-out infinite;
+}
+
+.trackingStatus.cancelled {
+  color: #b42318;
+  background: rgba(180, 35, 24, 0.1);
+}
+
+.trackingStatus.cancelled span {
+  background: #b42318;
+}
+
+.courier {
+  gap: 14px;
+  margin-bottom: 24px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--line);
+}
+
+.courier img {
+  width: 68px;
+  height: 68px;
+  object-fit: cover;
+  border-radius: 20px;
+}
+
+.courier h3 {
+  margin: 2px 0 4px;
+}
+
+.courier p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.courier button {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  margin-left: auto;
+  color: white;
+  background: var(--leaf);
+  border-radius: 50%;
+}
+
+.cancelOrderBtn {
+  width: 100%;
+  min-height: 48px;
+  margin: -8px 0 18px;
+  color: #b42318;
+  background: rgba(180, 35, 24, 0.08);
+  border: 1px solid rgba(180, 35, 24, 0.22);
+  border-radius: 14px;
+  font-weight: 900;
+  transition:
+    transform 180ms ease,
+    background 180ms ease;
+}
+
+.cancelOrderBtn:hover {
+  transform: translateY(-1px);
+  background: rgba(180, 35, 24, 0.12);
+}
+
+.cancelPicker {
+  display: grid;
+  gap: 10px;
+  margin: -8px 0 18px;
+  padding: 14px;
+  background: rgba(180, 35, 24, 0.06);
+  border: 1px solid rgba(180, 35, 24, 0.18);
+  border-radius: 14px;
+}
+
+.cancelPicker label {
+  color: #8a2f25;
+  font-size: 0.88rem;
+  font-weight: 900;
+}
+
+.cancelPicker select {
+  width: 100%;
+  min-height: 42px;
+  padding: 0 12px;
+  color: var(--ink);
+  background: white;
+  border: 1px solid rgba(29, 27, 22, 0.14);
+  border-radius: 10px;
+}
+
+.cancelPickerActions {
+  display: flex;
+  gap: 10px;
+}
+
+.cancelGhostBtn,
+.cancelConfirmBtn {
+  flex: 1;
+  min-height: 40px;
+  border-radius: 10px;
+  font-weight: 900;
+}
+
+.cancelGhostBtn {
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.88);
+  border: 1px solid rgba(29, 27, 22, 0.14);
+}
+
+.cancelConfirmBtn {
+  color: white;
+  background: #b42318;
+}
+
+.cancelNotice {
+  margin: -8px 0 18px;
+  color: #8a2f25;
+  font-size: 0.9rem;
+  font-weight: 800;
+  line-height: 1.45;
+}
+
+.steps {
+  display: grid;
+  gap: 16px;
+}
+
+.step {
+  gap: 12px;
+  color: var(--muted);
+}
+
+.step span {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 34px;
+  height: 34px;
+  color: var(--muted);
+  background: #f3ead5;
+  border-radius: 50%;
+  font-weight: 900;
+}
+
+.step.done {
+  color: var(--ink);
+}
+
+.step.done span {
+  color: white;
+  background: var(--leaf);
+}
+
+.step p {
+  margin: 0;
+  font-weight: 850;
+}
+
+.rewards {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 64px;
+  padding: 36px;
+  color: white;
+  background:
+    linear-gradient(120deg, rgba(29, 27, 22, 0.82), rgba(29, 27, 22, 0.62)),
+    url("https://images.unsplash.com/photo-1551218808-94e220e084d2?auto=format&fit=crop&w=1800&q=80")
+      center/cover;
+  border-radius: 30px;
+  box-shadow: var(--depth-3);
+  transform: translateZ(38px) rotateX(2deg);
+}
+
+.rewards .kicker {
+  color: var(--sun);
+}
+
+.rewards h2 {
+  max-width: 720px;
+  font-size: clamp(2rem, 4vw, 3.8rem);
+}
+
+@keyframes morph {
+  0%,
+  100% {
+    border-radius: 46% 54% 42% 58%;
+    transform: translateZ(38px) rotate(0deg);
+  }
+  50% {
+    border-radius: 57% 43% 55% 45%;
+    transform: translateZ(38px) rotate(4deg);
+  }
+}
+
+@keyframes plateFloat {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-4deg);
+  }
+  50% {
+    transform: translateY(-18px) rotate(3deg);
+  }
+}
+
+@keyframes cardBob {
+  0%,
+  100% {
+    transform: translateZ(52px) translateY(0);
+  }
+  50% {
+    transform: translateZ(52px) translateY(-12px);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0.72);
+    opacity: 0.72;
+  }
+  100% {
+    transform: scale(1.45);
+    opacity: 0;
+  }
+}
+
+@keyframes riseIn {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes drift {
+  to {
+    background-position: 148px 74px;
+  }
+}
+
+@keyframes riderBounce {
+  to {
+    transform: translate(-50%, -58%) rotate(-5deg);
+  }
+}
+
+@keyframes authIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px) translateZ(60px) rotateX(2deg) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) translateZ(60px) rotateX(2deg) scale(1);
+  }
+}
+
+@keyframes liveDot {
+  50% {
+    box-shadow: 0 0 0 12px rgba(14, 143, 111, 0);
+  }
+}
+
+@keyframes mapLivePulse {
+  0% {
+    opacity: 0.56;
+    transform: scale(0.65);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.25);
+  }
+}
+
+@keyframes mapLiveFloat {
+  from {
+    transform: translateY(-2px);
+  }
+  to {
+    transform: translateY(2px);
+  }
+}
+
+@media (max-width: 940px) {
+  main::before,
+  main::after {
+    opacity: 0.45;
+  }
+
+  .authCard,
+  .mapPanel,
+  .rewards {
+    transform: none;
+  }
+
+  .nav {
+    transform: translateX(-50%);
+  }
+
+  .feature:hover,
+  .restaurantCard:hover,
+  .menuCard:hover,
+  .menuPanel:hover,
+  .checkout:hover,
+  .trackingPanel:hover {
+    transform: none;
+  }
+
+  .nav nav {
+    display: none;
+  }
+
+  .hero,
+  .menuLayout,
+  .trackingLayout {
+    grid-template-columns: 1fr;
+  }
+
+  .hero {
+    min-height: auto;
+    padding-top: 34px;
+  }
+
+  .heroBg {
+    inset: 8px -18px 26px;
+    border-radius: 0 0 30px 30px;
+  }
+
+  .heroStage {
+    min-height: 440px;
+  }
+
+  .dishOrbit {
+    inset: 24px 20px 30px;
+  }
+
+  .featureStrip,
+  .restaurantGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .checkout {
+    position: static;
+  }
+
+  .authCard {
+    grid-template-columns: 1fr;
+  }
+
+  .authVisual {
+    min-height: 260px;
+  }
+
+  .authVisual h2 {
+    margin-top: 38px;
+  }
+}
+
+@media (max-width: 1100px) {
+  .menuLayout {
+    grid-template-columns: minmax(0, 1fr) 320px;
+  }
+
+  .trackingLayout {
+    grid-template-columns: 1fr;
+  }
+
+  .rewards {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 780px) {
+  main {
+    padding-top: 124px;
+  }
+
+  .nav {
+    top: 18px;
+    width: calc(100% - 20px);
+    padding: 12px;
+    gap: 10px;
+    border-radius: 16px;
+  }
+
+  .brand {
+    font-size: 1rem;
+  }
+
+  .navActions {
+    gap: 6px;
+  }
+
+  .loginBtn,
+  .signupBtn,
+  .accountPill,
+  .navCta {
+    min-height: 42px;
+  }
+
+  .signupBtn {
+    padding: 0 12px;
+  }
+
+  .hero,
+  .section,
+  .menuSection,
+  .tracking,
+  .rewards,
+  .featureStrip,
+  .authPage {
+    width: calc(100% - 20px);
+  }
+
+  .heroStage {
+    min-height: 390px;
+  }
+
+  .dishOrbit {
+    inset: 24px 16px 26px;
+  }
+
+  .checkout,
+  .trackingPanel {
+    padding: 16px;
+  }
+}
+
+@media (max-width: 640px) {
+  main::before,
+  main::after {
+    display: none;
+  }
+
+  main {
+    padding-top: 132px;
+  }
+
+  .nav {
+    width: calc(100% - 24px);
+  }
+
+  .brand {
+    font-size: 1rem;
+  }
+
+  .navActions {
+    gap: 6px;
+  }
+
+  .loginBtn,
+  .signupBtn {
+    width: 42px;
+    min-height: 42px;
+    padding: 0;
+    gap: 0;
+    font-size: 0;
+    justify-content: center;
+  }
+
+  .accountPill {
+    max-width: 150px;
+    min-height: 42px;
+  }
+
+  .accountPill span {
+    max-width: 84px;
+  }
+
+  .hero,
+  .section,
+  .menuSection,
+  .tracking,
+  .rewards,
+  .featureStrip,
+  .authPage {
+    width: calc(100% - 24px);
+  }
+
+  h1 {
+    font-size: clamp(2.8rem, 16vw, 4.1rem);
+  }
+
+  .hero p {
+    font-size: 1rem;
+  }
+
+  .heroActions,
+  .rewards,
+  .sectionHead {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .primaryBtn,
+  .secondaryBtn {
+    width: 100%;
+  }
+
+  .heroStats,
+  .featureStrip,
+  .restaurantGrid,
+  .menuGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .heroStats {
+    display: grid;
+  }
+
+  .heroStage {
+    min-height: 360px;
+  }
+
+  .floatingCard {
+    max-width: 172px;
+  }
+
+  .etaCard {
+    top: 42px;
+  }
+
+  .riderCard {
+    bottom: 46px;
+  }
+
+  .restaurantCard,
+  .restaurantCard img {
+    min-height: 310px;
+  }
+
+  .menuPanel,
+  .checkout,
+  .trackingPanel {
+    border-radius: 22px;
+  }
+
+  .mapPanel {
+    min-height: 390px;
+    border-radius: 22px;
+  }
+
+  .rewards {
+    padding: 26px;
+  }
+
+  .authOverlay {
+    align-items: start;
+    overflow-y: auto;
+  }
+
+  .authCard {
+    border-radius: 22px;
+  }
+
+  .authVisual,
+  .authForm {
+    padding: 24px;
+  }
+
+  .authPage {
+    min-height: 100svh;
+    padding: 14px 0;
+  }
+}
+
+@media (max-width: 420px) {
+  main {
+    padding-top: 118px;
+  }
+
+  .brand {
+    gap: 7px;
+    font-size: 0.94rem;
+  }
+
+  .brandMark,
+  .bagIcon,
+  .navCta {
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
+    min-height: 38px;
+  }
+
+  .hero {
+    padding-top: 22px;
+  }
+
+  .heroStage {
+    min-height: 330px;
+  }
+
+  .floatingCard {
+    max-width: 154px;
+    padding: 10px 12px;
+  }
+
+  .authVisual,
+  .authForm {
+    padding: 18px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .authCard,
+  .heroBg,
+  .feature,
+  .restaurantCard,
+  .menuPanel,
+  .checkout,
+  .trackingPanel,
+  .menuCard,
+  .mapPanel,
+  .rewards {
+    transform: none !important;
+  }
+
+  .nav {
+    transform: translateX(-50%) !important;
+  }
+
+  .mapLiveRider,
+  .mapLivePulse,
+  .mapLivePin,
+  .mapRouteProgress {
+    transition: none !important;
+    animation: none !important;
+  }
+
+  .particleLayer {
+    display: none;
+  }
+}
