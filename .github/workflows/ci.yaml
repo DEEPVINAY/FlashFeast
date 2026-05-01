@@ -36,19 +36,20 @@ jobs:
         run: |
           docker tag food-delivery-app ${{ secrets.DOCKER_USERNAME }}/food-delivery-app:latest
           docker push ${{ secrets.DOCKER_USERNAME }}/food-delivery-app:latest
-      # 🔐 Setup SSH key (IMPORTANT FIX)
-      # 🔐 Setup SSH key + config
+      # 🔐 Setup SSH key
       - name: Setup SSH
         run: |
           mkdir -p ~/.ssh
-          printf "%s" "${{ secrets.SSH_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          echo -e "Host *\n\tStrictHostKeyChecking no\n\tUserKnownHostsFile=/dev/null" > ~/.ssh/config
+          cat <<EOF > ~/.ssh/gcp_key
+          ${{ secrets.SSH_KEY }}
+          EOF
 
-# 🚀 Deploy using raw ssh
+          chmod 600 ~/.ssh/gcp_key
+
+# 🚀 Deploy
       - name: Deploy to VM
         run: |
-          ssh ${{ secrets.VM_USER }}@${{ secrets.VM_IP }} << 'EOF'
+          ssh -i ~/.ssh/gcp_key -o StrictHostKeyChecking=no ${{ secrets.VM_USER }}@${{ secrets.VM_IP }} << 'EOF'
           docker stop app || true
           docker rm app || true
 
