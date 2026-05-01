@@ -48,7 +48,7 @@ jobs:
         with:
           host: ${{ secrets.VM_IP }}
           username: ${{ secrets.VM_USER }}
-          key: ${{ secrets.SSH_KEY }}
+          key_path: key.pem
           script: |
             docker stop app || true
             docker rm app || true
