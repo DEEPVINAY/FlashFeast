@@ -37,24 +37,24 @@ jobs:
           docker tag food-delivery-app ${{ secrets.DOCKER_USERNAME }}/food-delivery-app:latest
           docker push ${{ secrets.DOCKER_USERNAME }}/food-delivery-app:latest
       # 🔐 Setup SSH key (IMPORTANT FIX)
-      - name: Setup SSH key
-        run: | 
-          printf "%s" "${{ secrets.SSH_KEY }}" > key.pem
-          chmod 600 key.pem
+      # 🔐 Setup SSH key + config
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          printf "%s" "${{ secrets.SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          echo -e "Host *\n\tStrictHostKeyChecking no\n\tUserKnownHostsFile=/dev/null" > ~/.ssh/config
 
-      # 🚀 DEPLOY
+# 🚀 Deploy using raw ssh
       - name: Deploy to VM
-        uses: appleboy/ssh-action@v1.0.0
-        with:
-          host: ${{ secrets.VM_IP }}
-          username: ${{ secrets.VM_USER }}
-          key_path: key.pem
-          script: |
-            docker stop app || true
-            docker rm app || true
+        run: |
+          ssh ${{ secrets.VM_USER }}@${{ secrets.VM_IP }} << 'EOF'
+          docker stop app || true
+          docker rm app || true
 
-            docker image prune -af
+          docker image prune -af
 
-            docker pull ${{ secrets.DOCKER_USERNAME }}/food-delivery-app:latest
+          docker pull ${{ secrets.DOCKER_USERNAME }}/food-delivery-app:latest
 
-            docker run -d -p 80:3000 --name app ${{ secrets.DOCKER_USERNAME }}/food-delivery-app:latest
+          docker run -d -p 80:3000 --name app ${{ secrets.DOCKER_USERNAME }}/food-delivery-app:latest
+          EOF
