@@ -36,6 +36,11 @@ jobs:
         run: |
           docker tag food-delivery-app ${{ secrets.DOCKER_USERNAME }}/food-delivery-app:latest
           docker push ${{ secrets.DOCKER_USERNAME }}/food-delivery-app:latest
+      # 🔐 Setup SSH key (IMPORTANT FIX)
+      - name: Setup SSH key
+        run: |
+          echo "${{ secrets.SSH_KEY }}" > key.pem
+          chmod 600 key.pem
 
       # 🚀 DEPLOY
       - name: Deploy to VM
