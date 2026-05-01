@@ -1,30 +1,37 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@500;600;700;800&display=swap");
 
 :root {
-  color: #0f172a;
-  background: #ffffff;
+  color: #12211a;
+  background: #f6faf7;
   font-family:
-    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-    sans-serif;
+    "Manrope", "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont,
+    "Helvetica Neue", sans-serif;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
-  --ink: #0f172a;
-  --muted: #475569;
-  --sun: #fbbc05;
-  --tomato: #ea4335;
-  --leaf: #34a853;
-  --plum: #4285f4;
-  --cream: #ffffff;
-  --line: rgba(255, 255, 255, 0.3);
-  --shadow: 0 24px 80px rgba(15, 23, 42, 0.12);
-  --depth-1: 0 14px 28px rgba(15, 23, 42, 0.08);
-  --depth-2: 0 26px 56px rgba(15, 23, 42, 0.1);
-  --depth-3: 0 40px 90px rgba(15, 23, 42, 0.14);
-  --card-glass: rgba(255, 255, 255, 0.6);
-  --glass-border: rgba(255, 255, 255, 0.3);
-  --glass-shadow: 0 16px 48px rgba(15, 23, 42, 0.12);
-  --heading-font: Inter, ui-sans-serif, system-ui, -apple-system,
-    BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --ink: #12211a;
+  --muted: #5f7066;
+  --sun: #d9c7a2;
+  --tomato: #4f8f74;
+  --leaf: #3f886b;
+  --plum: #7bb39a;
+  --cream: #f6faf7;
+  --sage: #9bb7a5;
+  --sage-deep: #4b7d66;
+  --line: rgba(179, 197, 188, 0.6);
+  --shadow: 0 30px 90px rgba(14, 26, 19, 0.14);
+  --depth-1: 0 16px 36px rgba(18, 32, 24, 0.08);
+  --depth-2: 0 28px 64px rgba(18, 32, 24, 0.12);
+  --depth-3: 0 44px 120px rgba(18, 32, 24, 0.16);
+  --card-glass: rgba(255, 255, 255, 0.9);
+  --glass-border: rgba(183, 206, 190, 0.7);
+  --glass-shadow: 18px 18px 40px rgba(16, 30, 22, 0.12),
+    -16px -16px 32px rgba(255, 255, 255, 0.82);
+  --heading-font: "Sora", "Manrope", "Segoe UI", system-ui, -apple-system,
+    BlinkMacSystemFont, "Helvetica Neue", sans-serif;
+  --neo-inset: inset 6px 6px 12px rgba(20, 35, 26, 0.12),
+    inset -8px -8px 16px rgba(255, 255, 255, 0.8);
+  --accent-glow: 0 0 0 1px rgba(157, 200, 177, 0.5),
+    0 16px 40px rgba(95, 138, 118, 0.25);
 }
 
 * {
@@ -40,10 +47,10 @@ body {
   min-width: 320px;
   overflow-x: hidden;
   background:
-    radial-gradient(circle at 12% 10%, rgba(66, 133, 244, 0.12), transparent 26rem),
-    radial-gradient(circle at 88% 18%, rgba(52, 168, 83, 0.1), transparent 24rem),
-    radial-gradient(circle at 52% 78%, rgba(251, 188, 5, 0.09), transparent 28rem),
-    #ffffff;
+    radial-gradient(circle at 12% 8%, rgba(147, 195, 171, 0.28), transparent 30rem),
+    radial-gradient(circle at 88% 16%, rgba(209, 231, 219, 0.32), transparent 28rem),
+    radial-gradient(circle at 52% 78%, rgba(175, 206, 189, 0.2), transparent 34rem),
+    #f6faf7;
   perspective: 1400px;
   transform-style: preserve-3d;
 }
@@ -95,7 +102,7 @@ h3,
 }
 
 body::selection {
-  background: var(--tomato);
+  background: var(--leaf);
   color: white;
 }
 
@@ -126,9 +133,9 @@ main {
   transform-style: preserve-3d;
   padding-top: 140px;
   background:
-    radial-gradient(circle at 12% 8%, rgba(66, 133, 244, 0.08), transparent 28rem),
-    radial-gradient(circle at 88% 18%, rgba(234, 67, 53, 0.06), transparent 26rem),
-    linear-gradient(180deg, #ffffff 0%, #f9fbff 50%, #ffffff 100%);
+    radial-gradient(circle at 12% 8%, rgba(146, 193, 170, 0.16), transparent 30rem),
+    radial-gradient(circle at 88% 18%, rgba(206, 228, 217, 0.2), transparent 28rem),
+    linear-gradient(180deg, #f8fbf9 0%, #f2f7f4 50%, #f8fbf9 100%);
 }
 
 main::before,
@@ -145,7 +152,7 @@ main::before {
   left: -100px;
   width: 360px;
   height: 360px;
-  background: radial-gradient(circle, rgba(66, 133, 244, 0.18), transparent 72%);
+  background: radial-gradient(circle, rgba(147, 195, 171, 0.26), transparent 72%);
   transform: translateZ(-140px);
 }
 
@@ -154,7 +161,7 @@ main::after {
   right: -110px;
   width: 380px;
   height: 380px;
-  background: radial-gradient(circle, rgba(52, 168, 83, 0.16), transparent 72%);
+  background: radial-gradient(circle, rgba(202, 226, 213, 0.3), transparent 72%);
   transform: translateZ(-180px);
 }
 
@@ -176,11 +183,11 @@ main > * {
   width: min(1180px, calc(100% - 32px));
   margin: 0;
   padding: 20px 0;
-  background: var(--card-glass);
+  background: rgba(255, 255, 255, 0.86);
   border: 1px solid var(--glass-border);
   border-radius: 20px;
   box-shadow: var(--glass-shadow);
-  backdrop-filter: blur(12px);
+  backdrop-filter: blur(14px);
   transform: translateX(-50%) translateZ(42px);
 }
 
@@ -191,9 +198,9 @@ main > * {
   content: "";
   border-radius: inherit;
   background: linear-gradient(
-    110deg,
-    rgba(255, 255, 255, 0.72),
-    rgba(255, 255, 255, 0.2)
+    120deg,
+    rgba(255, 255, 255, 0.9),
+    rgba(223, 239, 230, 0.5)
   );
 }
 
@@ -560,19 +567,37 @@ main > * {
   z-index: 0;
   border-radius: 34px;
   background:
-    linear-gradient(120deg, rgba(255, 255, 255, 0.74), rgba(255, 255, 255, 0.58)),
-    url("https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=2200&q=80")
+    linear-gradient(130deg, rgba(255, 255, 255, 0.92), rgba(245, 250, 247, 0.72)),
+    url("https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=2200&q=80")
       center/cover;
   overflow: hidden;
   box-shadow: var(--glass-shadow);
+  border: 1px solid var(--glass-border);
   transform: translateZ(-20px) rotateX(2deg);
+}
+
+.heroBg::before {
+  position: absolute;
+  inset: -35% 0 0 -10%;
+  content: "";
+  background:
+    radial-gradient(circle at 30% 30%, rgba(129, 183, 156, 0.35), transparent 55%),
+    radial-gradient(circle at 70% 60%, rgba(221, 239, 230, 0.45), transparent 60%);
+  opacity: 0.6;
+  filter: blur(12px);
+  animation: liquidDrift 16s ease-in-out infinite;
 }
 
 .heroBg::after {
   position: absolute;
   inset: 0;
   content: "";
-  background: linear-gradient(90deg, rgba(255, 255, 255, 0.96), rgba(255, 255, 255, 0.62) 56%, rgba(255, 255, 255, 0.14));
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.95),
+    rgba(246, 250, 247, 0.78) 54%,
+    rgba(244, 249, 246, 0.18)
+  );
 }
 
 .heroContent,
@@ -594,7 +619,7 @@ main > * {
   color: var(--tomato);
   font-weight: 900;
   text-transform: uppercase;
-  letter-spacing: 0;
+  letter-spacing: 0.12em;
 }
 
 .eyebrow {
@@ -603,6 +628,9 @@ main > * {
   margin-bottom: 20px;
   padding: 10px 14px;
   border-radius: 999px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--neo-inset);
 }
 
 h1,
@@ -656,14 +684,15 @@ h2 {
 
 .primaryBtn {
   color: white;
-  background: linear-gradient(135deg, var(--tomato), #ff8a00);
-  box-shadow: 0 18px 40px rgba(255, 77, 46, 0.3);
+  background: linear-gradient(135deg, #3f886b, #8ac7ac);
+  box-shadow: 0 20px 46px rgba(63, 136, 107, 0.35);
 }
 
 .secondaryBtn {
   color: var(--ink);
-  background: var(--card-glass);
+  background: rgba(255, 255, 255, 0.9);
   border: 1px solid var(--glass-border);
+  box-shadow: var(--neo-inset);
 }
 
 .primaryBtn:hover,
@@ -683,7 +712,9 @@ h2 {
   padding: 14px 16px;
   color: var(--muted);
   border-radius: 18px;
-  box-shadow: var(--glass-shadow);
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--neo-inset);
   transform: translateZ(18px);
 }
 
@@ -695,6 +726,221 @@ h2 {
 
 .heroStage {
   min-height: 570px;
+}
+
+.ingredientStage {
+  position: relative;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: 18px;
+  min-height: 520px;
+  padding: 26px;
+  border-radius: 30px;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  overflow: hidden;
+  transform-style: preserve-3d;
+  isolation: isolate;
+}
+
+.ingredientStage::after {
+  position: absolute;
+  inset: -30% 20% 10% -20%;
+  content: "";
+  background:
+    radial-gradient(circle at 30% 30%, rgba(137, 188, 162, 0.4), transparent 60%),
+    radial-gradient(circle at 70% 70%, rgba(224, 241, 232, 0.6), transparent 65%);
+  filter: blur(10px);
+  opacity: 0.7;
+  animation: liquidDrift 14s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.ingredientHalo {
+  position: absolute;
+  inset: 18% 18% 20% 18%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(210, 230, 219, 0.8), transparent 62%);
+  filter: blur(1px);
+  animation: haloPulse 6s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.ingredientRingWrap {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: min(360px, 72vw);
+  height: min(360px, 72vw);
+  transform-style: preserve-3d;
+  animation: ringFloat 10s ease-in-out infinite;
+  z-index: 2;
+}
+
+.ingredientRing {
+  --ring-depth: 220px;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transform: rotateY(calc(var(--active-index) * -1 * var(--step)));
+  transition: transform 820ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ingredientCard {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: clamp(150px, 26vw, 200px);
+  height: clamp(190px, 30vw, 240px);
+  padding: 10px;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid rgba(203, 222, 211, 0.9);
+  box-shadow: var(--glass-shadow);
+  transform-style: preserve-3d;
+  transform: translate(-50%, -50%) rotateY(calc(var(--i) * var(--step)))
+    translateZ(var(--ring-depth));
+  display: grid;
+  gap: 10px;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    transform 600ms ease,
+    opacity 400ms ease,
+    box-shadow 400ms ease;
+}
+
+.ingredientCard img {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 18px;
+  box-shadow: var(--neo-inset);
+}
+
+.ingredientCard.active {
+  transform: translate(-50%, -50%) rotateY(calc(var(--i) * var(--step)))
+    translateZ(calc(var(--ring-depth) + 30px)) scale(1.05);
+  box-shadow: var(--accent-glow);
+  opacity: 1;
+}
+
+.ingredientCard:not(.active) {
+  opacity: 0.72;
+}
+
+.ingredientLabel {
+  display: grid;
+  gap: 4px;
+  padding: 0 6px 6px;
+  text-align: left;
+}
+
+.ingredientLabel span {
+  font-weight: 800;
+  color: var(--ink);
+}
+
+.ingredientLabel small {
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.ingredientInfo {
+  display: grid;
+  gap: 6px;
+  text-align: center;
+  max-width: 320px;
+  z-index: 2;
+}
+
+.ingredientInfo h3 {
+  margin: 0;
+  font-size: 1.4rem;
+}
+
+.ingredientInfo p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.96rem;
+  line-height: 1.5;
+}
+
+.ingredientKicker {
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--sage-deep);
+}
+
+.ingredientControls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 2;
+}
+
+.ingredientArrow {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid var(--glass-border);
+  border-radius: 50%;
+  box-shadow: var(--neo-inset);
+  transition: transform 180ms ease;
+}
+
+.ingredientArrow:hover {
+  transform: translateY(-2px);
+}
+
+.ingredientDots {
+  display: flex;
+  gap: 8px;
+}
+
+.ingredientDot {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border-radius: 50%;
+  background: rgba(120, 150, 135, 0.35);
+  border: 1px solid rgba(157, 185, 170, 0.6);
+  transition: transform 220ms ease, background 220ms ease;
+}
+
+.ingredientDot.active {
+  background: var(--leaf);
+  transform: scale(1.4);
+  box-shadow: 0 0 0 6px rgba(63, 136, 107, 0.16);
+}
+
+.nutrientCard {
+  top: 20px;
+  left: 18px;
+}
+
+.glowCard {
+  top: 84px;
+  right: 22px;
+  animation-delay: -1.3s;
+}
+
+.techCard {
+  bottom: 26px;
+  right: 16px;
+  animation-delay: -2s;
 }
 
 .dishOrbit {
@@ -727,7 +973,11 @@ h2 {
   gap: 10px;
   padding: 14px 16px;
   border-radius: 18px;
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid var(--glass-border);
   box-shadow: var(--glass-shadow);
+  backdrop-filter: blur(12px);
   animation: cardBob 3.4s ease-in-out infinite;
   transform: translateZ(52px);
 }
@@ -773,7 +1023,7 @@ h2 {
   min-height: 76px;
   padding: 0 18px;
   color: var(--ink);
-  background: var(--card-glass);
+  background: rgba(255, 255, 255, 0.92);
   border: 1px solid var(--glass-border);
   border-radius: 20px;
   box-shadow: var(--glass-shadow);
@@ -835,6 +1085,8 @@ h2 {
   transition:
     transform 260ms ease,
     box-shadow 260ms ease;
+  content-visibility: auto;
+  contain-intrinsic-size: 380px 320px;
 }
 
 .restaurantCard::before {
@@ -860,6 +1112,17 @@ h2 {
   min-height: 380px;
   object-fit: cover;
   transition: transform 500ms ease;
+}
+
+.restaurantCard.logoCard img {
+  object-fit: contain;
+  object-position: center 30%;
+  padding: 26px;
+  background: #f4f8f6;
+}
+
+.restaurantCard.logoCard:hover img {
+  transform: none;
 }
 
 .restaurantCard:hover img {
@@ -968,6 +1231,9 @@ h2 {
   padding: 0 16px;
   min-height: 58px;
   border-radius: 18px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--neo-inset);
 }
 
 .searchBar input {
@@ -1019,6 +1285,8 @@ h2 {
     transform 180ms ease,
     box-shadow 180ms ease;
   transform-style: preserve-3d;
+  content-visibility: auto;
+  contain-intrinsic-size: 280px 240px;
 }
 
 .menuCard::before {
@@ -1238,6 +1506,12 @@ h2 {
   filter: saturate(1.08) contrast(1.04);
 }
 
+.mapFramePlaceholder {
+  background:
+    linear-gradient(130deg, rgba(255, 255, 255, 0.85), rgba(226, 235, 229, 0.7)),
+    radial-gradient(circle at 20% 20%, rgba(162, 196, 178, 0.25), transparent 60%);
+}
+
 .mapPanel.idle .mapFrame {
   filter: saturate(0.9) contrast(1.02);
 }
@@ -1301,9 +1575,9 @@ h2 {
 }
 
 .mapRouteProgress {
-  stroke: #ffbf3f;
+  stroke: var(--leaf);
   stroke-width: 1.85;
-  filter: drop-shadow(0 0 8px rgba(255, 191, 63, 0.7));
+  filter: drop-shadow(0 0 8px rgba(63, 136, 107, 0.45));
   transition: stroke-dasharray 1200ms linear;
 }
 
@@ -1324,7 +1598,7 @@ h2 {
   width: 68px;
   height: 68px;
   border-radius: 50%;
-  background: rgba(255, 191, 63, 0.34);
+  background: rgba(120, 170, 145, 0.34);
   animation: mapLivePulse 1.7s ease-out infinite;
 }
 
@@ -1336,7 +1610,7 @@ h2 {
   width: 42px;
   height: 42px;
   color: white;
-  background: linear-gradient(135deg, var(--tomato), var(--sun));
+  background: linear-gradient(135deg, var(--leaf), #8ac7ac);
   border: 2px solid rgba(255, 255, 255, 0.75);
   border-radius: 50%;
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.3);
@@ -1640,6 +1914,38 @@ h2 {
   font-size: clamp(2rem, 4vw, 3.8rem);
 }
 
+@keyframes liquidDrift {
+  0%,
+  100% {
+    transform: translate3d(-4%, -6%, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(6%, 4%, 0) scale(1.05);
+  }
+}
+
+@keyframes haloPulse {
+  0%,
+  100% {
+    transform: scale(0.96);
+    opacity: 0.75;
+  }
+  50% {
+    transform: scale(1.04);
+    opacity: 0.95;
+  }
+}
+
+@keyframes ringFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
 @keyframes morph {
   0%,
   100% {
@@ -1789,11 +2095,20 @@ h2 {
   }
 
   .heroStage {
-    min-height: 440px;
+    min-height: 480px;
   }
 
-  .dishOrbit {
-    inset: 24px 20px 30px;
+  .ingredientStage {
+    min-height: 460px;
+  }
+
+  .ingredientRingWrap {
+    width: min(320px, 80vw);
+    height: min(320px, 80vw);
+  }
+
+  .ingredientRing {
+    --ring-depth: 180px;
   }
 
   .featureStrip,
@@ -1876,11 +2191,20 @@ h2 {
   }
 
   .heroStage {
-    min-height: 390px;
+    min-height: 420px;
   }
 
-  .dishOrbit {
-    inset: 24px 16px 26px;
+  .ingredientStage {
+    min-height: 420px;
+  }
+
+  .ingredientRingWrap {
+    width: min(300px, 86vw);
+    height: min(300px, 86vw);
+  }
+
+  .ingredientRing {
+    --ring-depth: 160px;
   }
 
   .checkout,
@@ -1972,19 +2296,38 @@ h2 {
   }
 
   .heroStage {
-    min-height: 360px;
+    min-height: 390px;
+  }
+
+  .ingredientInfo h3 {
+    font-size: 1.2rem;
+  }
+
+  .ingredientInfo p {
+    font-size: 0.9rem;
   }
 
   .floatingCard {
     max-width: 172px;
   }
 
-  .etaCard {
-    top: 42px;
+  .glowCard {
+    display: none;
   }
 
-  .riderCard {
-    bottom: 46px;
+  .nutrientCard {
+    top: 30px;
+    left: 12px;
+  }
+
+  .glowCard {
+    top: 62px;
+    right: 12px;
+  }
+
+  .techCard {
+    bottom: 18px;
+    right: 12px;
   }
 
   .restaurantCard,
@@ -2051,7 +2394,7 @@ h2 {
   }
 
   .heroStage {
-    min-height: 330px;
+    min-height: 360px;
   }
 
   .floatingCard {

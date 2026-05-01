@@ -1,12 +1,13 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
 import {
   Bike,
   ChefHat,
+  ChevronLeft,
   ChevronRight,
   Clock3,
-  Flame,
   IndianRupee,
+  Leaf,
   Lock,
   LogIn,
   LogOut,
@@ -19,11 +20,11 @@ import {
   Search,
   ShieldCheck,
   ShoppingBag,
+  Sparkles,
   Star,
   Utensils,
   User,
   UserPlus,
-  WalletCards,
   Zap
 } from "lucide-react";
 import "./styles.css";
@@ -31,6 +32,45 @@ import appIcon from "./assets/app-icon.svg";
 
 const usersStorageKey = "flashfeast-users";
 const sessionStorageKey = "flashfeast-user";
+const foodImageAssets = import.meta.glob("./assets/food/*.{jpg,jpeg,png,webp}", {
+  eager: true,
+  import: "default"
+});
+const fallbackFoodImage = Object.values(foodImageAssets)[0];
+const restaurantLogoAssets = import.meta.glob(
+  "./assets/restaurant-logos/*.{avif,jpg,jpeg,png,webp}",
+  {
+    eager: true,
+    import: "default"
+  }
+);
+const fallbackRestaurantLogo = Object.values(restaurantLogoAssets)[0];
+
+function localFoodImage(fileName) {
+  const direct = foodImageAssets[`./assets/food/${fileName}`];
+  if (direct) {
+    return direct;
+  }
+
+  const normalized = fileName.replace(/\s+/g, " ").trim();
+  const match = Object.entries(foodImageAssets).find(([key]) =>
+    key.endsWith(`/${normalized}`)
+  );
+  return match ? match[1] : fallbackFoodImage;
+}
+
+function localRestaurantLogo(fileName) {
+  const direct = restaurantLogoAssets[`./assets/restaurant-logos/${fileName}`];
+  if (direct) {
+    return direct;
+  }
+
+  const normalized = fileName.replace(/\s+/g, " ").trim();
+  const match = Object.entries(restaurantLogoAssets).find(([key]) =>
+    key.endsWith(`/${normalized}`)
+  );
+  return match ? match[1] : fallbackRestaurantLogo || fallbackFoodImage;
+}
 
 function ParticleBackground() {
   const canvasRef = useRef(null);
@@ -65,10 +105,10 @@ function ParticleBackground() {
     const margin = 12;
 
     const palette = [
-      [66, 133, 244],
-      [234, 67, 53],
-      [251, 188, 5],
-      [52, 168, 83]
+      [122, 166, 144],
+      [168, 201, 185],
+      [201, 219, 206],
+      [95, 132, 112]
     ];
 
     const perm = new Uint8Array(512);
@@ -254,6 +294,41 @@ function ParticleBackground() {
   );
 }
 
+function DeferredParticles({ enabled = true }) {
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    if (!enabled) {
+      return undefined;
+    }
+
+    let cancelled = false;
+    const reveal = () => {
+      if (!cancelled) {
+        setReady(true);
+      }
+    };
+
+    if (typeof window !== "undefined" && "requestIdleCallback" in window) {
+      const idleId = window.requestIdleCallback(reveal, { timeout: 1200 });
+      return () => {
+        cancelled = true;
+        if (window.cancelIdleCallback) {
+          window.cancelIdleCallback(idleId);
+        }
+      };
+    }
+
+    const timeoutId = window.setTimeout(reveal, 900);
+    return () => {
+      cancelled = true;
+      window.clearTimeout(timeoutId);
+    };
+  }, [enabled]);
+
+  return ready ? <ParticleBackground /> : null;
+}
+
 function readSavedUsers() {
   try {
     const raw = window.localStorage.getItem(usersStorageKey);
@@ -287,7 +362,7 @@ function LoginPage({ onBack, onOpenSignup, onSubmit }) {
 
   return (
     <main className="authPageMain">
-      <ParticleBackground />
+      <DeferredParticles />
       <section className="authPage" aria-label="Login page">
         <div className="authCard authPageCard">
           <div className="authVisual">
@@ -365,7 +440,7 @@ function SignupPage({ onBack, onOpenLogin, onSubmit }) {
 
   return (
     <main className="authPageMain">
-      <ParticleBackground />
+      <DeferredParticles />
       <section className="authPage" aria-label="Signup page">
         <div className="authCard authPageCard">
           <div className="authVisual">
@@ -503,19 +578,22 @@ const cityRestaurantMap = {
       name: "Paradise Biryani",
       tag: "Hyderabadi biryani",
       eta: "16-22 min",
-      image: commonsImage("Hyderabadi Biryani.jpg")
+      image: localRestaurantLogo("paradise.avif"),
+      imageFit: "contain"
     },
     {
       name: "Chutneys Express",
       tag: "Dosa & idli",
       eta: "18-25 min",
-      image: commonsImage("Masala dosa (96279).jpg")
+      image: localRestaurantLogo("chutneys.jpeg"),
+      imageFit: "contain"
     },
     {
       name: "Shah Ghouse Kitchen",
       tag: "Kebabs & haleem",
       eta: "20-28 min",
-      image: commonsImage("Haleem.jpg")
+      image: localRestaurantLogo("shah-ghouse.avif"),
+      imageFit: "contain"
     },
     {
       name: "Jubilee Burger Club",
@@ -879,8 +957,7 @@ const menu = [
     rating: 4.9,
     time: "19 min",
     category: "Bowls",
-    image:
-      "https://images.unsplash.com/photo-1631452180519-c014fe946bc7?auto=format&fit=crop&w=800&q=80"
+    image: localFoodImage("Paneer Tikka.jpeg")
   },
   {
     id: 2,
@@ -890,8 +967,7 @@ const menu = [
     rating: 4.8,
     time: "22 min",
     category: "Asian",
-    image:
-      "https://images.unsplash.com/photo-1496116218417-1a781b1c416c?auto=format&fit=crop&w=800&q=80"
+    image: localFoodImage("Chilli Potato.jpeg")
   },
   {
     id: 3,
@@ -901,8 +977,7 @@ const menu = [
     rating: 4.7,
     time: "16 min",
     category: "Pizza",
-    image:
-      "https://images.unsplash.com/photo-1595854341625-f33ee10dbf94?auto=format&fit=crop&w=800&q=80"
+    image: localFoodImage("Paneer Majestic.jpeg")
   },
   {
     id: 4,
@@ -912,8 +987,7 @@ const menu = [
     rating: 4.9,
     time: "25 min",
     category: "Sushi",
-    image:
-      "https://images.unsplash.com/photo-1579871494447-9811cf80d66c?auto=format&fit=crop&w=800&q=80"
+    image: localFoodImage("Tofu Bowl.jpeg")
   },
   {
     id: 5,
@@ -923,8 +997,7 @@ const menu = [
     rating: 4.9,
     time: "21 min",
     category: "Indian",
-    image:
-      "https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?auto=format&fit=crop&w=800&q=80"
+    image: localFoodImage("Butter Chicken.jpeg")
   },
   {
     id: 6,
@@ -934,200 +1007,247 @@ const menu = [
     rating: 4.6,
     time: "17 min",
     category: "Burgers",
+    image: localFoodImage("Veg Crunch Burger.jpeg")
+  }
+];
+
+const ingredientSlides = [
+  {
+    name: "Avocado",
+    note: "Healthy fats",
+    detail: "Creamy omega balance for steady, sustained energy.",
     image:
-      "https://images.unsplash.com/photo-1550317138-10000687a72b?auto=format&fit=crop&w=800&q=80"
+      "https://images.unsplash.com/photo-1502741338009-cac2772e18bc?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    name: "Citrus",
+    note: "Vitamin C",
+    detail: "Bright, immune-forward freshness in every squeeze.",
+    image:
+      "https://images.unsplash.com/photo-1502741126161-b048400d3c9b?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    name: "Microgreens",
+    note: "Phytonutrients",
+    detail: "High-density greens that lift flavor without weight.",
+    image:
+      "https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    name: "Harvest Bowl",
+    note: "Plant protein",
+    detail: "Balanced grains and legumes for clean, lasting fuel.",
+    image:
+      "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    name: "Berries",
+    note: "Antioxidants",
+    detail: "Natural sweetness with a fresh, bright finish.",
+    image:
+      "https://images.unsplash.com/photo-1464965911861-746a04b4bca6?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    name: "Olive oil",
+    note: "Heart healthy",
+    detail: "Cold-pressed richness that keeps flavors refined.",
+    image:
+      "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?auto=format&fit=crop&w=800&q=80"
   }
 ];
 
 function commonsImage(fileName) {
-  return `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(fileName)}?width=900`;
+  const query = fileName
+    .replace(/\.[^/.]+$/, "")
+    .replace(/[^a-zA-Z0-9]+/g, " ")
+    .trim()
+    .replace(/\s+/g, ",");
+  const safeQuery = query || "gourmet,food";
+  const sig = Array.from(fileName).reduce(
+    (acc, char) => (acc + char.charCodeAt(0)) % 1000,
+    7
+  );
+  return `https://source.unsplash.com/900x700/?${safeQuery}&sig=${sig}`;
 }
 
 const exactDishImages = [
-  ["pongal bowl", "Pongal Dish.JPG"],
-  ["pongal vada", "Pongal Dish.JPG"],
-  ["mini tiffin platter", "Tiffins South indian.jpg"],
-  ["family tiffin box", "Tiffins South indian.jpg"],
-  ["dosa coffee combo", "Masala dosa (96279).jpg"],
-  ["filter coffee", "South Indian Filter Coffee.jpg"],
-  ["degree coffee", "South Indian Filter Coffee.jpg"],
-  ["mutton seekh kebab", "Mutton Seekh (9454117913).jpg"],
-  ["chicken malai kebab", "Chicken Malai Kebab.JPG"],
-  ["haleem bowl", "Haleem (2).jpg"],
-  ["special mutton haleem", "Haleem.jpg"],
-  ["paneer rumali roll", "Shahi paneer roll with Makhmali gravy 2.jpg"],
-  ["egg paratha roll", "EGG ROLL.JPG"],
-  ["nalli nihari", "Nalli Nihari.JPG"],
-  ["dalcha", "Pot of Lamb Dalcha.jpg"],
-  ["raita bowl", "Cucumber-raita.jpg"],
-  ["bagara rice", "Bagara Rice South Indian Style.jpg"],
-  ["double ka meetha", "Double Ka Meetha.JPG"],
-  ["qubani ka meetha", "Khobani Ka Meetha.JPG"],
-  ["khubani ka meetha", "Khobani Ka Meetha.JPG"],
-  ["chicken 65", "Chicken 65.jpg"],
-  ["apollo fish", "APOLLO FISH.jpg"],
-  ["paneer majestic", "Paneer 65.jpg"],
-  ["mirchi ka salan", "Hyderabadi Hari Mirchi Ka Salan.JPG"],
-  ["hari mirchi ka salan", "Hyderabadi Hari Mirchi Ka Salan.JPG"],
-  ["dum chicken biryani", "Hyderabadi Chicken Biryani.jpg"],
-  ["chicken biryani", "Hyderabadi Chicken Biryani.jpg"],
-  ["mutton biryani", "Mutton biryani.JPG"],
-  ["paneer biryani", "Indian Veg Biryani.jpg"],
-  ["egg biryani", "Egg biryani.JPG"],
-  ["andhra chicken biryani", "Hyderabadi Biryani.jpg"],
-  ["masala dosa", "Masala dosa (96279).jpg"],
-  ["benne masala dosa", "MTR Masala Dosa.JPG"],
-  ["ghee karam dosa", "Masala Dosa 02.jpg"],
-  ["pesarattu upma", "Pesarattu Upma.jpg"],
-  ["onion rava dosa", "Rawa Onion Dosa (48754301486).jpg"],
-  ["rava dosa", "Rawa Onion Dosa (48754301486).jpg"],
-  ["idli sambar box", "Idli-Sambar.JPG"],
-  ["idli sambar", "Idli-Sambar.JPG"],
-  ["medu vada", "Medu Vada.JPG"],
-  ["thatte idli", "Idli-Sambar.JPG"],
-  ["idli", "Idli vada in sambar.jpg"],
-  ["vada sambar", "Idli vada in sambar.jpg"],
-  ["pani puri", "Pani Puri .jpg"],
-  ["puchka", "Pani Puri .jpg"],
-  ["jhalmuri", "Pani Puri .jpg"],
-  ["aloo kabli", "Pani Puri .jpg"],
-  ["ragda pattice", "Pani Puri .jpg"],
-  ["dahi sev puri", "Pani Puri .jpg"],
-  ["bhel puri", "Pani Puri .jpg"],
-  ["samosa chaat", "Pani Puri .jpg"],
-  ["vada pav", "Vada Pav.jpg"],
-  ["misal pav", "Vada Pav.jpg"],
-  ["dabeli", "Vada Pav.jpg"],
-  ["pav bhaji", "Pav Bhaji.JPG"],
-  ["masale bhat", "Bagara Rice South Indian Style.jpg"],
-  ["butter chicken", "Chicken makhani.jpg"],
-  ["chettinad chicken", "Chicken makhani.jpg"],
-  ["paneer tikka", "Paneer tikka.jpg"],
-  ["paneer chilli", "Paneer tikka.jpg"],
-  ["paneer chaat", "Paneer tikka.jpg"],
-  ["kathi roll", "Chicken Kathi Roll (5646735923).jpg"],
-  ["chicken roll", "Chicken Kathi Roll (5646735923).jpg"],
-  ["paneer roll", "Shahi paneer roll with Makhmali gravy 2.jpg"],
-  ["egg roll", "EGG ROLL.JPG"],
-  ["frankie", "Kathi Roll.jpg"],
-  ["gulab jamun", "Gulab Jamun.jpg"],
-  ["thali", "'1' Thali Indian Food.jpg"],
-  ["luchi", "'1' Thali Indian Food.jpg"],
-  ["sabudana khichdi", "'1' Thali Indian Food.jpg"],
-  ["pithla bhakri", "'1' Thali Indian Food.jpg"],
-  ["kothimbir vadi", "'1' Thali Indian Food.jpg"],
-  ["steamed rice", "Bagara Rice South Indian Style.jpg"],
-  ["veg pulao", "Veg Pulao (Indian fried rice).jpg"],
-  ["basanti pulao", "Bagara Rice South Indian Style.jpg"],
-  ["pizza", "Pizza Margherita (14703152728).jpg"],
-  ["garlic bread", "Pizza Margherita (14703152728).jpg"],
-  ["smash burger", "Smash Burger, Village Commons, Tallahassee.jpg"],
-  ["crispy chicken burger", "Crispy Chicken Burger & French Fry Set.jpg"],
-  ["paneer makhani burger", "Caffine Rush Smoothie and Achari Paneer Burger - The Honeyed Tale Cafe, Vadodara - 04.jpg"],
-  ["veg crunch burger", "Veg Patty Burger.jpg"],
-  ["loaded masala fries", "Loaded fries food.jpg"],
-  ["peri peri fries", "Peri Peri French Fries - Mum's Cafe, Vadodara - Gujarat - 01.jpg"],
-  ["cheese fries", "Cheese Fries.jpg"],
-  ["sushi", "Sushi platter.jpg"],
-  ["teriyaki chicken bowl", "Teriyaki Chicken Rice Bowl from Botejyu (2024-12-21).jpg"],
-  ["tofu bowl", "Bali vegan bowl with tofu.jpg"],
-  ["curd rice bowl", "Curd Rice.jpg"],
-  ["pulihora rice bowl", "Pulihora.jpg"],
-  ["lemon rice", "Picture of Lemon rice dish.JPG"],
-  ["edamame", "Edamame in a tray.jpg"],
-  ["chilli potato", "Honey Chilli potato.jpg"],
-  ["masala soda", "Masala soda.jpg"],
-  ["lemon soda", "Nimbu Soda Or Lemon Soda.jpg"],
-  ["sweet lassi", "Sweet Lassi.JPG"]
+  ["pongal bowl", "Pongal Bowl.jpeg"],
+  ["pongal vada", "Pongal Bowl.jpeg"],
+  ["mini tiffin platter", "Mini Tiffin Platter.jpeg"],
+  ["family tiffin box", "Mini Tiffin Platter.jpeg"],
+  ["dosa coffee combo", "Dosa Coffee Combo.jpeg"],
+  ["filter coffee", "Filter Coffee.jpeg"],
+  ["degree coffee", "Filter Coffee.jpeg"],
+  ["badam milk", "Badam Milk.jpeg"],
+  ["mutton seekh kebab", "Mutton Sheek Kabbab.jpeg"],
+  ["chicken malai kebab", "Chicken Malai Kabbab.jpeg"],
+  ["haleem bowl", "Haleem bowl.jpeg"],
+  ["special mutton haleem", "Mutton Haleem Special.jpeg"],
+  ["paneer rumali roll", "Paneer Rumali Roll.jpeg"],
+  ["egg paratha roll", "Egg Paratha roll.jpeg"],
+  ["egg kathi roll", "Egg Kathi roll.jpeg"],
+  ["nalli nihari", "Nalli Nihari.jpeg"],
+  ["dalcha", "Dalcha.jpeg"],
+  ["raita bowl", "Raita Bowl.jpeg"],
+  ["bagara rice", "Bagara Rice.jpeg"],
+  ["baggara rice", "Baggara Rice.jpeg"],
+  ["double ka meetha", "Double ka Meetha.jpeg"],
+  ["qubani ka meetha", "Qubani ka Meetha.jpeg"],
+  ["khubani ka meetha", "Qubani ka Meetha.jpeg"],
+  ["chicken 65", "Chicken 65.jpeg"],
+  ["apollo fish", "Apollo Fish.jpeg"],
+  ["paneer majestic", "Paneer Majestic.jpeg"],
+  ["mirchi ka salan", "Mirchi Ka Salan.jpeg"],
+  ["hari mirchi ka salan", "Mirchi Ka Salan.jpeg"],
+  ["dum chicken biryani", "Dum Chicken Biriyani.jpeg"],
+  ["chicken biryani", "Dum Chicken Biriyani.jpeg"],
+  ["mutton biryani", "Mutton Biriyani.jpeg"],
+  ["paneer biryani", "Paneer Biriyani.jpeg"],
+  ["egg biryani", "Egg Biriyani.jpeg"],
+  ["andhra chicken biryani", "Dum Chicken Biriyani.jpeg"],
+  ["masala dosa", "Masala Dosa.jpeg"],
+  ["benne masala dosa", "Masala Dosa.jpeg"],
+  ["ghee karam dosa", "Ghee Karam Dosa.jpeg"],
+  ["pesarattu upma", "Pesarattu Upma.jpeg"],
+  ["onion rava dosa", "Onion Rava dosa.jpeg"],
+  ["rava dosa", "Onion Rava dosa.jpeg"],
+  ["idli sambar box", "Idli Sambar box.jpeg"],
+  ["idli sambar", "Idli Sambar box.jpeg"],
+  ["medu vada", "Medu Vada.jpeg"],
+  ["thatte idli", "Idli Sambar box.jpeg"],
+  ["idli", "Idli Sambar box.jpeg"],
+  ["vada sambar", "Idli Sambar box.jpeg"],
+  ["pani puri", "Chilli Potato.jpeg"],
+  ["puchka", "Chilli Potato.jpeg"],
+  ["jhalmuri", "Chilli Potato.jpeg"],
+  ["aloo kabli", "Chilli Potato.jpeg"],
+  ["ragda pattice", "Chilli Potato.jpeg"],
+  ["dahi sev puri", "Chilli Potato.jpeg"],
+  ["bhel puri", "Chilli Potato.jpeg"],
+  ["samosa chaat", "Chilli Potato.jpeg"],
+  ["vada pav", "Veg Crunch Burger.jpeg"],
+  ["misal pav", "Veg Crunch Burger.jpeg"],
+  ["dabeli", "Veg Crunch Burger.jpeg"],
+  ["pav bhaji", "Veg Crunch Burger.jpeg"],
+  ["masale bhat", "Baggara Rice.jpeg"],
+  ["butter chicken", "Butter Chicken.jpeg"],
+  ["chettinad chicken", "Butter Chicken.jpeg"],
+  ["paneer tikka", "Paneer Tikka.jpeg"],
+  ["paneer chilli", "Paneer Tikka.jpeg"],
+  ["paneer chaat", "Paneer Tikka.jpeg"],
+  ["kathi roll", "Chicken Kathi Roll.jpeg"],
+  ["chicken roll", "Chicken Kathi Roll.jpeg"],
+  ["rumali chicken roll", "Rumali chicken Roll.jpeg"],
+  ["paneer roll", "Paneer Kathi Roll.jpeg"],
+  ["egg roll", "Egg Kathi roll.jpeg"],
+  ["frankie", "Chicken Kathi Roll.jpeg"],
+  ["gulab jamun", "Double ka Meetha.jpeg"],
+  ["thali", "Mini Tiffin Platter.jpeg"],
+  ["luchi", "Mini Tiffin Platter.jpeg"],
+  ["sabudana khichdi", "Mini Tiffin Platter.jpeg"],
+  ["pithla bhakri", "Mini Tiffin Platter.jpeg"],
+  ["kothimbir vadi", "Mini Tiffin Platter.jpeg"],
+  ["steamed rice", "Veg Pulav.jpeg"],
+  ["veg pulao", "Veg Pulav.jpeg"],
+  ["basanti pulao", "Veg Pulav.jpeg"],
+  ["pizza", "Paneer Majestic.jpeg"],
+  ["garlic bread", "Paneer Majestic.jpeg"],
+  ["smash burger", "Smash Burger.jpeg"],
+  ["crispy chicken burger", "Crispy Chicken Burger.jpeg"],
+  ["paneer makhani burger", "Paneer Makhni Burger.jpeg"],
+  ["veg crunch burger", "Veg Crunch Burger.jpeg"],
+  ["loaded masala fries", "Loaded Masala Fries.jpeg"],
+  ["peri peri fries", "Peri Peri Fries.jpeg"],
+  ["cheese fries", "Cheese Fries.jpeg"],
+  ["sushi", "Tofu Bowl.jpeg"],
+  ["teriyaki chicken bowl", "Teriyaki Chicken Bowl.jpeg"],
+  ["tofu bowl", "Tofu Bowl.jpeg"],
+  ["curd rice bowl", "Curd Rice Bowl.jpeg"],
+  ["pulihora rice bowl", "Pulihora Rice Bowl.jpeg"],
+  ["lemon rice", "Lemon Rice.jpeg"],
+  ["edamame", "Edamamme.jpeg"],
+  ["chilli potato", "Chilli Potato.jpeg"],
+  ["masala soda", "Masala Soda.jpeg"],
+  ["lemon soda", "lemon Soda.jpeg"],
+  ["sweet lassi", "Lassi.jpeg"],
+  ["cold coffee", "Cold Coffee Shake.jpeg"],
+  ["oreo shake", "Oreo Shake.jpeg"],
+  ["chocolate shake", "Chocolate Shake.jpeg"],
+  ["loaded fries", "Loaded Masala Fries.jpeg"]
 ];
 
 const foodImageLibrary = [
   {
     keywords: ["biryani", "pulao"],
-    image: commonsImage("Hyderabadi Biryani.jpg")
+    image: localFoodImage("Dum Chicken Biriyani.jpeg")
   },
   {
     keywords: ["dosa", "uttapam", "pesarattu"],
-    image: commonsImage("Masala dosa (96279).jpg")
+    image: localFoodImage("Masala Dosa.jpeg")
   },
   {
     keywords: ["idli", "vada", "pongal", "tiffin"],
-    image: commonsImage("Idli vada in sambar.jpg")
+    image: localFoodImage("Idli Sambar box.jpeg")
   },
   {
     keywords: ["kebab", "tikka", "tandoor", "chaap"],
-    image: commonsImage("Vegetarian kebab platter.jpg")
+    image: localFoodImage("Chicken Malai Kabbab.jpeg")
   },
   {
     keywords: ["butter chicken", "curry", "lababdar", "dal", "nihari", "chettinad", "kurma"],
-    image: commonsImage("Chicken makhani.jpg")
+    image: localFoodImage("Butter Chicken.jpeg")
   },
   {
     keywords: ["roll", "frankie", "wrap", "kathi"],
-    image: commonsImage("Chicken Kathi Roll (5646735923).jpg")
+    image: localFoodImage("Chicken Kathi Roll.jpeg")
   },
   {
-    keywords: ["pizza", "margherita"],
-    image: commonsImage("Pizza Margherita (14703152728).jpg")
-  },
-  {
-    keywords: ["pasta", "arrabbiata", "pesto"],
-    image:
-      "https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?auto=format&fit=crop&w=800&q=80"
+    keywords: ["pizza", "margherita", "pasta", "arrabbiata", "pesto"],
+    image: localFoodImage("Paneer Majestic.jpeg")
   },
   {
     keywords: ["chaat", "pani puri", "puchka", "bhel", "ragda", "tikki", "jhalmuri", "kabli"],
-    image: commonsImage("Pani Puri .jpg")
+    image: localFoodImage("Chilli Potato.jpeg")
   },
   {
     keywords: ["burger", "fries"],
-    image:
-      "https://images.unsplash.com/photo-1550317138-10000687a72b?auto=format&fit=crop&w=800&q=80"
+    image: localFoodImage("Smash Burger.jpeg")
   },
   {
-    keywords: ["sushi", "maki"],
-    image: commonsImage("Sushi platter.jpg")
-  },
-  {
-    keywords: ["ramen", "miso"],
-    image:
-      "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=800&q=80"
+    keywords: ["sushi", "maki", "ramen", "miso"],
+    image: localFoodImage("Tofu Bowl.jpeg")
   },
   {
     keywords: ["pav", "vada pav", "misal", "sandwich", "bhaji", "dabeli"],
-    image: commonsImage("Vada Pav.jpg")
+    image: localFoodImage("Veg Crunch Burger.jpeg")
   },
   {
     keywords: ["thali", "meals", "bhakri", "luchi"],
-    image: commonsImage("'1' Thali Indian Food.jpg")
+    image: localFoodImage("Mini Tiffin Platter.jpeg")
   },
   {
     keywords: ["parotta", "kothu", "idiyappam"],
-    image:
-      "https://images.unsplash.com/photo-1630409346824-4f0e7b080087?auto=format&fit=crop&w=800&q=80"
+    image: localFoodImage("Rumali chicken Roll.jpeg")
   },
   {
     keywords: ["fish", "prawn", "seafood", "shorshe", "fry"],
-    image:
-      "https://images.unsplash.com/photo-1559847844-5315695dadae?auto=format&fit=crop&w=800&q=80"
+    image: localFoodImage("Apollo Fish.jpeg")
   },
   {
     keywords: ["coffee", "chai", "chaas", "lassi", "lemonade", "shake", "milk", "cooler", "soda", "solkadhi"],
-    image:
-      "https://images.unsplash.com/photo-1544145945-f90425340c7e?auto=format&fit=crop&w=800&q=80"
+    image: localFoodImage("Lassi.jpeg")
   },
   {
     keywords: ["dessert", "sweet", "meetha", "payasam", "jamun", "phirni", "tiramisu", "mousse", "custard", "cake", "pak", "rabdi", "doi", "rosogolla", "rasgulla"],
-    image: commonsImage("Gulab Jamun.jpg")
+    image: localFoodImage("Double ka Meetha.jpeg")
   },
   {
     keywords: ["khichdi", "bhat", "pulao", "bagara"],
-    image: commonsImage("Bagara Rice South Indian Style.jpg")
+    image: localFoodImage("Bagara Rice.jpeg")
   },
   {
     keywords: ["tofu bowl", "teriyaki", "bento", "crispy corn"],
-    image:
-      "https://images.unsplash.com/photo-1631452180519-c014fe946bc7?auto=format&fit=crop&w=800&q=80"
+    image: localFoodImage("Teriyaki Chicken Bowl.jpeg")
   }
 ];
 
@@ -1353,24 +1473,14 @@ function openStreetMapEmbedUrl(bounds, markerPoint) {
 }
 
 function onlineDishImage(dishName, sectionName) {
-  const tags = `${dishName} ${sectionName} food`
-    .toLowerCase()
-    .replace(/[^a-z0-9\s]/g, " ")
-    .trim()
-    .replace(/\s+/g, ",");
-  const lock = Array.from(`${dishName}-${sectionName}`.toLowerCase()).reduce(
-    (acc, char) => (acc * 31 + char.charCodeAt(0)) % 10000,
-    7
-  );
-
-  return `https://loremflickr.com/900/600/${tags || "food,dish"}?lock=${lock}`;
+  return localFoodImage("Veg Pulav.jpeg");
 }
 
 function imageForDish(dishName, sectionName) {
   const lookup = `${dishName} ${sectionName}`.toLowerCase();
   const exactMatch = exactDishImages.find(([keyword]) => lookup.includes(keyword));
   if (exactMatch) {
-    return commonsImage(exactMatch[1]);
+    return localFoodImage(exactMatch[1]);
   }
 
   const match = foodImageLibrary.find(({ keywords }) =>
@@ -1419,6 +1529,9 @@ function App() {
   const [selectedRestaurant, setSelectedRestaurant] = useState("All nearby");
   const [progress, setProgress] = useState(0);
   const [query, setQuery] = useState("");
+  const deferredQuery = useDeferredValue(query);
+  const [activeIngredient, setActiveIngredient] = useState(0);
+  const [sliderPaused, setSliderPaused] = useState(false);
   const [orderStarted, setOrderStarted] = useState(false);
   const [orderId, setOrderId] = useState("");
   const [cancelledOrderId, setCancelledOrderId] = useState("");
@@ -1430,6 +1543,8 @@ function App() {
   const [routePoints, setRoutePoints] = useState([]);
   const [locationLabel, setLocationLabel] = useState("Detecting nearby restaurants");
   const [authView, setAuthView] = useState(null);
+  const [trackingVisible, setTrackingVisible] = useState(false);
+  const trackingRef = useRef(null);
   const [user, setUser] = useState(() => {
     const saved = window.localStorage.getItem(sessionStorageKey);
     if (!saved) {
@@ -1453,6 +1568,66 @@ function App() {
     }, 1300);
     return () => window.clearInterval(id);
   }, [orderStarted, progress]);
+
+  useEffect(() => {
+    if (sliderPaused) {
+      return undefined;
+    }
+
+    const id = window.setInterval(() => {
+      setActiveIngredient((value) => (value + 1) % ingredientSlides.length);
+    }, 4200);
+    return () => window.clearInterval(id);
+  }, [sliderPaused]);
+
+  useEffect(() => {
+    const heroAssets = [
+      appIcon,
+      ingredientSlides[0]?.image,
+      "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=2200&q=80"
+    ].filter(Boolean);
+
+    const links = heroAssets.map((href) => {
+      const link = document.createElement("link");
+      link.rel = "preload";
+      link.as = "image";
+      link.href = href;
+      link.crossOrigin = "anonymous";
+      document.head.appendChild(link);
+      return link;
+    });
+
+    return () => {
+      links.forEach((link) => link.remove());
+    };
+  }, []);
+
+  useEffect(() => {
+    const node = trackingRef.current;
+    if (!node || typeof IntersectionObserver === "undefined") {
+      setTrackingVisible(true);
+      return undefined;
+    }
+
+    let didCancel = false;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          if (!didCancel) {
+            setTrackingVisible(true);
+          }
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "220px 0px" }
+    );
+
+    observer.observe(node);
+    return () => {
+      didCancel = true;
+      observer.disconnect();
+    };
+  }, []);
 
   useEffect(() => {
     if (!navigator.geolocation) {
@@ -1479,29 +1654,52 @@ function App() {
     );
   }, []);
 
-  const localRestaurants = restaurants.map((restaurant, index) => ({
-    ...restaurant,
-    ...(cityRestaurantMap[userCity]?.[index] || {})
-  }));
-  const localMenu = buildLocalMenu(userCity, localRestaurants);
-  const localRestaurantsWithMenu = localRestaurants.map((restaurant) => ({
-    ...restaurant,
-    menuCount: localMenu.filter((item) => item.kitchen === restaurant.name).length
-  }));
-  const restaurantOptions = ["All nearby", ...localRestaurants.map((item) => item.name)];
-  const categories = ["All", ...new Set(localMenu.map((item) => item.category))];
-  const filteredMenu = localMenu.filter((item) => {
-    const matchesCategory =
-      activeCategory === "All" || item.category === activeCategory;
-    const matchesRestaurant =
-      selectedRestaurant === "All nearby" || item.kitchen === selectedRestaurant;
-    const needle = `${item.name} ${item.kitchen} ${item.category}`.toLowerCase();
-    return (
-      matchesCategory &&
-      matchesRestaurant &&
-      needle.includes(query.toLowerCase())
+  const localRestaurants = useMemo(
+    () =>
+      restaurants.map((restaurant, index) => ({
+        ...restaurant,
+        ...(cityRestaurantMap[userCity]?.[index] || {})
+      })),
+    [userCity]
+  );
+  const localMenu = useMemo(
+    () => buildLocalMenu(userCity, localRestaurants),
+    [userCity, localRestaurants]
+  );
+  const localRestaurantsWithMenu = useMemo(
+    () =>
+      localRestaurants.map((restaurant) => ({
+        ...restaurant,
+        menuCount: localMenu.filter((item) => item.kitchen === restaurant.name).length
+      })),
+    [localMenu, localRestaurants]
+  );
+  const restaurantOptions = useMemo(
+    () => ["All nearby", ...localRestaurants.map((item) => item.name)],
+    [localRestaurants]
+  );
+  const categories = useMemo(
+    () => ["All", ...new Set(localMenu.map((item) => item.category))],
+    [localMenu]
+  );
+  const filteredMenu = useMemo(() => {
+    const needle = deferredQuery.toLowerCase();
+    return localMenu.filter((item) => {
+      const matchesCategory =
+        activeCategory === "All" || item.category === activeCategory;
+      const matchesRestaurant =
+        selectedRestaurant === "All nearby" || item.kitchen === selectedRestaurant;
+      const searchText = `${item.name} ${item.kitchen} ${item.category}`.toLowerCase();
+      return matchesCategory && matchesRestaurant && searchText.includes(needle);
+    });
+  }, [activeCategory, deferredQuery, localMenu, selectedRestaurant]);
+  const ingredientStep = 360 / ingredientSlides.length;
+  const activeIngredientData = ingredientSlides[activeIngredient];
+  const stepIngredient = (direction) => {
+    setActiveIngredient((value) =>
+      (value + direction + ingredientSlides.length) % ingredientSlides.length
     );
-  });
+  };
 
   const cartItems = useMemo(
     () =>
@@ -1563,16 +1761,19 @@ function App() {
   const riderMapPoint = hasActiveOrder ? routeTravelPoint : destinationPoint;
   const riderMapPosition = mapOverlayPosition(riderMapPoint, overlayBounds);
   const riderMapLabel = hasActiveOrder ? `${eta} away` : hasDeliveredOrder ? "Arrived" : "Waiting";
-  const trackingMapUrl = showLiveRider
-    ? openStreetMapEmbedUrl(overlayBounds, riderMapPoint)
-    : googleMapsApiKey
-      ? googlePlaceEmbedUrl(mapFocusPoint, hasCancelledOrder ? 12 : 13)
-      : googleMapsFallbackEmbedUrl(mapFocusPoint, hasCancelledOrder ? 12 : 13);
+  const shouldLoadTracking = trackingVisible || hasActiveOrder || hasCancelledOrder;
+  const trackingMapUrl = shouldLoadTracking
+    ? showLiveRider
+      ? openStreetMapEmbedUrl(overlayBounds, riderMapPoint)
+      : googleMapsApiKey
+        ? googlePlaceEmbedUrl(mapFocusPoint, hasCancelledOrder ? 12 : 13)
+        : googleMapsFallbackEmbedUrl(mapFocusPoint, hasCancelledOrder ? 12 : 13)
+    : "";
 
   useEffect(() => {
     let cancelled = false;
 
-    if (!orderStarted || hasCancelledOrder) {
+    if (!orderStarted || hasCancelledOrder || !shouldLoadTracking) {
       setRoutePoints([]);
       return undefined;
     }
@@ -1631,7 +1832,8 @@ function App() {
     restaurantPoint.lat,
     restaurantPoint.lon,
     destinationPoint.lat,
-    destinationPoint.lon
+    destinationPoint.lon,
+    shouldLoadTracking
   ]);
 
   function updateCart(id, delta) {
@@ -1796,7 +1998,7 @@ function App() {
   return (
     <>
       <main>
-      <ParticleBackground />
+      <DeferredParticles />
       <header className="nav">
         <a className="brand" href="#top" aria-label="FlashFeast home">
           <span className="brandMark">
@@ -1846,69 +2048,143 @@ function App() {
             <MapPin size={18} />
             {locationLabel}
           </div>
-          <h1>Crave it. Track it. Taste it while it is still sizzling.</h1>
+          <h1>Clean energy meals, crafted fresh and delivered fast.</h1>
           <p>
-            Order from top kitchens around {userCity}, watch your courier move in real time,
-            and get chef-hot food delivered with delivery estimates that update
-            as your order moves.
+            FlashFeast curates macro-balanced bowls and gourmet plates around {userCity},
+            with real-time freshness tracking and chef-led kitchens focused on clean fuel.
           </p>
           <div className="heroActions">
             <a href="#menu" className="primaryBtn">
-              Order now
+              Build a clean order
               <ChevronRight size={20} />
             </a>
             <a href="#tracking" className="secondaryBtn">
               <Navigation size={19} />
-              Track live
+              Track freshness
             </a>
           </div>
           <div className="heroStats" aria-label="FlashFeast service stats">
             <span>
-              <strong>18 min</strong>
-              avg arrival
+              <strong>92%</strong>
+              fresh sourcing
             </span>
             <span>
-              <strong>4.9</strong>
-              diner rating
+              <strong>28g</strong>
+              avg protein
             </span>
             <span>
-              <strong>24/7</strong>
-              concierge
+              <strong>15 min</strong>
+              avg delivery
             </span>
           </div>
         </div>
 
-        <div className="heroStage" aria-label="Animated delivery preview">
-          <div className="dishOrbit">
-            <img
-              src="https://images.unsplash.com/photo-1625944525533-473f1a3d54e7?auto=format&fit=crop&w=700&q=80"
-              alt="Fresh bowl meal"
-            />
+        <div className="heroStage" aria-label="Fresh ingredient carousel">
+          <div
+            className="ingredientStage"
+            onPointerEnter={() => setSliderPaused(true)}
+            onPointerLeave={() => setSliderPaused(false)}
+          >
+            <div className="ingredientHalo" aria-hidden="true" />
+            <div className="ingredientRingWrap">
+              <div
+                className="ingredientRing"
+                style={{
+                  "--active-index": activeIngredient,
+                  "--step": `${ingredientStep}deg`
+                }}
+              >
+                {ingredientSlides.map((ingredient, index) => (
+                  <button
+                    className={`ingredientCard${index === activeIngredient ? " active" : ""}`}
+                    style={{ "--i": index }}
+                    key={ingredient.name}
+                    type="button"
+                    onClick={() => setActiveIngredient(index)}
+                    aria-pressed={index === activeIngredient}
+                  >
+                    <img
+                      src={ingredient.image}
+                      alt={ingredient.name}
+                      loading={index === activeIngredient ? "eager" : "lazy"}
+                      decoding="async"
+                    />
+                    <div className="ingredientLabel">
+                      <span>{ingredient.name}</span>
+                      <small>{ingredient.note}</small>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div className="ingredientInfo" aria-live="polite">
+              <span className="ingredientKicker">Ingredient focus</span>
+              <h3>{activeIngredientData.name}</h3>
+              <p>{activeIngredientData.detail}</p>
+            </div>
+            <div className="ingredientControls">
+              <button
+                className="ingredientArrow"
+                type="button"
+                onClick={() => stepIngredient(-1)}
+                aria-label="Previous ingredient"
+              >
+                <ChevronLeft size={18} />
+              </button>
+              <div className="ingredientDots" aria-label="Ingredient slider">
+                {ingredientSlides.map((ingredient, index) => (
+                  <button
+                    key={ingredient.name}
+                    className={
+                      index === activeIngredient ? "ingredientDot active" : "ingredientDot"
+                    }
+                    type="button"
+                    onClick={() => setActiveIngredient(index)}
+                    aria-label={`Show ${ingredient.name}`}
+                    aria-pressed={index === activeIngredient}
+                  />
+                ))}
+              </div>
+              <button
+                className="ingredientArrow"
+                type="button"
+                onClick={() => stepIngredient(1)}
+                aria-label="Next ingredient"
+              >
+                <ChevronRight size={18} />
+              </button>
+            </div>
+            <div className="floatingCard nutrientCard">
+              <Leaf size={18} />
+              <span>
+                <strong>Plant-forward</strong>
+                clean macros
+              </span>
+            </div>
+            <div className="floatingCard glowCard">
+              <Sparkles size={18} />
+              <span>
+                <strong>Chef finish</strong>
+                plated by pros
+              </span>
+            </div>
+            <div className="floatingCard techCard">
+              <Zap size={18} />
+              <span>
+                <strong>Live nutrition</strong>
+                updated instantly
+              </span>
+            </div>
           </div>
-          <div className="floatingCard etaCard">
-            <Clock3 size={19} />
-            <span>
-              <strong>12 min</strong>
-              to your door
-            </span>
-          </div>
-          <div className="floatingCard riderCard">
-            <Bike size={20} />
-            <span>
-              <strong>Arya</strong>
-              picking up
-            </span>
-          </div>
-          <div className="pulseRing" />
         </div>
       </section>
 
       <section className="featureStrip" aria-label="Delivery promises">
         {[
-          [Flame, "Hot-drop packaging"],
-          [ShieldCheck, "Verified kitchens"],
-          [WalletCards, "UPI, card, wallet"],
-          [Phone, "Human support"]
+          [Leaf, "Macro-balanced menus"],
+          [ShieldCheck, "Traceable sourcing"],
+          [Sparkles, "Gourmet plating"],
+          [Zap, "Live nutrition stats"]
         ].map(([Icon, label]) => (
           <div className="feature" key={label}>
             <Icon size={21} />
@@ -1920,16 +2196,25 @@ function App() {
       <section className="section" id="restaurants">
         <div className="sectionHead">
           <span className="kicker">{locationLabel}</span>
-          <h2>Local restaurants moving fast tonight</h2>
+          <h2>Gourmet kitchens building clean menus tonight</h2>
         </div>
         <div className="restaurantGrid">
           {localRestaurantsWithMenu.map((restaurant, index) => (
             <article
-              className="restaurantCard"
+              className={
+                restaurant.imageFit === "contain"
+                  ? "restaurantCard logoCard"
+                  : "restaurantCard"
+              }
               style={{ "--accent": restaurant.accent, "--delay": `${index * 90}ms` }}
               key={restaurant.name}
             >
-              <img src={restaurant.image} alt={`${restaurant.name} food`} />
+              <img
+                src={restaurant.image}
+                alt={`${restaurant.name} food`}
+                loading="lazy"
+                decoding="async"
+              />
               <div className="restaurantOverlay">
                 <span>{restaurant.tag}</span>
                 <h3>{restaurant.name}</h3>
@@ -1963,8 +2248,8 @@ function App() {
           </span>
           <h2>
             {selectedRestaurant === "All nearby"
-              ? "Build your perfect delivery"
-              : "Order from this local favourite"}
+              ? "Build a nutrition-forward order"
+              : "Order a clean plate from this kitchen"}
           </h2>
         </div>
         <div className="menuLayout">
@@ -2003,7 +2288,7 @@ function App() {
             <div className="menuGrid">
               {filteredMenu.map((item) => (
                 <article className="menuCard" key={item.id}>
-                  <img src={item.image} alt={item.name} />
+                  <img src={item.image} alt={item.name} loading="lazy" decoding="async" />
                   <div className="menuInfo">
                     <span>{item.kitchen}</span>
                     <h3>{item.name}</h3>
@@ -2054,7 +2339,7 @@ function App() {
             <div className="cartList">
               {cartItems.map((item) => (
                 <div className="cartItem" key={item.id}>
-                  <img src={item.image} alt="" />
+                  <img src={item.image} alt="" loading="lazy" decoding="async" />
                   <div>
                     <strong>{item.name}</strong>
                     <span>
@@ -2097,7 +2382,7 @@ function App() {
         </div>
       </section>
 
-      <section className="tracking" id="tracking">
+      <section className="tracking" id="tracking" ref={trackingRef}>
         <div className="sectionHead">
           <span className="kicker">Realtime order tracking</span>
           <h2>
@@ -2118,13 +2403,17 @@ function App() {
                   : "mapPanel idle"
             }
           >
-            <iframe
-              className="mapFrame"
-              src={trackingMapUrl}
-              title={`Tracking map for ${trackedKitchenName} in ${userCity}`}
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-            />
+            {shouldLoadTracking ? (
+              <iframe
+                className="mapFrame"
+                src={trackingMapUrl}
+                title={`Tracking map for ${trackedKitchenName} in ${userCity}`}
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              />
+            ) : (
+              <div className="mapFrame mapFramePlaceholder" aria-hidden="true" />
+            )}
             {showLiveRider && (
               <svg className="mapRouteOverlay" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
                 <path className="mapRouteTrail" d={routeOverlayPath} pathLength="100" />
@@ -2202,6 +2491,8 @@ function App() {
               <img
                 src="https://images.unsplash.com/photo-1544723795-3fb6469f5b39?auto=format&fit=crop&w=300&q=80"
                 alt="Courier Arya"
+                loading="lazy"
+                decoding="async"
               />
               <div>
                 <span>
