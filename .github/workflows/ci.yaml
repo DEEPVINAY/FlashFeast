@@ -35,7 +35,10 @@ jobs:
       - name: Push Docker image
         run: |
           docker tag food-delivery-app ${{ secrets.DOCKER_USERNAME }}/food-delivery-app:latest
+          docker tag food-delivery-app ${{ secrets.DOCKER_USERNAME }}/food-delivery-app:${{ github.sha }}
+
           docker push ${{ secrets.DOCKER_USERNAME }}/food-delivery-app:latest
+          docker push ${{ secrets.DOCKER_USERNAME }}/food-delivery-app:${{ github.sha }}
       # 🔐 Setup SSH key
       - name: Setup SSH
         run: |
@@ -48,14 +51,16 @@ jobs:
 
 # 🚀 Deploy
       - name: Deploy to VM
-        run: |
-          ssh -i ~/.ssh/gcp_key -o StrictHostKeyChecking=no ${{ secrets.VM_USER }}@${{ secrets.VM_IP }} << 'EOF'
-          docker stop app || true
-          docker rm app || true
-
-          docker image prune -af
-
-          docker pull ${{ secrets.DOCKER_USERNAME }}/food-delivery-app:latest
-
-          docker run -d -p 80:3000 --name app ${{ secrets.DOCKER_USERNAME }}/food-delivery-app:latest
+          run: |
+          ssh -i ~/.ssh/gcp_key -o StrictHostKeyChecking=no ${{ secrets.VM_USER }}@${{ secrets.VM_IP }} << EOF
+            echo "Pulling new version..."
+            docker pull ${{ secrets.DOCKER_USERNAME }}/food-delivery-app:${{ github.sha }}
+            echo "Stopping old container..."
+            docker stop app || true
+            docker rm app || true
+            echo "Cleaning unused images (safe)..."
+            docker image prune -f
+            echo "Starting new container..."
+            docker run -d -p 80:3000 --name app \
+            ${{ secrets.DOCKER_USERNAME }}/food-delivery-app:${{ github.sha }}
           EOF

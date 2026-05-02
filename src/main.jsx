@@ -14,6 +14,7 @@ import {
   Mail,
   MapPin,
   Minus,
+  Menu,
   Navigation,
   Phone,
   Plus,
@@ -25,6 +26,7 @@ import {
   Utensils,
   User,
   UserPlus,
+  X,
   Zap
 } from "lucide-react";
 import "./styles.css";
@@ -1543,6 +1545,7 @@ function App() {
   const [routePoints, setRoutePoints] = useState([]);
   const [locationLabel, setLocationLabel] = useState("Detecting nearby restaurants");
   const [authView, setAuthView] = useState(null);
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [trackingVisible, setTrackingVisible] = useState(false);
   const trackingRef = useRef(null);
   const [user, setUser] = useState(() => {
@@ -1673,6 +1676,16 @@ function App() {
         menuCount: localMenu.filter((item) => item.kitchen === restaurant.name).length
       })),
     [localMenu, localRestaurants]
+  );
+  const selectedRestaurantProfile = useMemo(
+    () =>
+      localRestaurantsWithMenu.find((restaurant) => restaurant.name === selectedRestaurant) ||
+      null,
+    [localRestaurantsWithMenu, selectedRestaurant]
+  );
+  const selectedRestaurantItems = useMemo(
+    () => localMenu.filter((item) => item.kitchen === selectedRestaurant),
+    [localMenu, selectedRestaurant]
   );
   const restaurantOptions = useMemo(
     () => ["All nearby", ...localRestaurants.map((item) => item.name)],
@@ -1847,9 +1860,9 @@ function App() {
     setSelectedRestaurant(restaurantName);
     setActiveCategory("All");
     setQuery("");
-    window.setTimeout(() => {
+    window.requestAnimationFrame(() => {
       document.getElementById("menu")?.scrollIntoView({ behavior: "smooth" });
-    }, 80);
+    });
   }
 
   function startOrder() {
@@ -1975,6 +1988,10 @@ function App() {
     window.localStorage.removeItem(sessionStorageKey);
   }
 
+  function closeMobileNav() {
+    setMobileNavOpen(false);
+  }
+
   if (authView === "login") {
     return (
       <LoginPage
@@ -1999,45 +2016,72 @@ function App() {
     <>
       <main>
       <DeferredParticles />
-      <header className="nav">
+      <header className={`nav${mobileNavOpen ? " navOpen" : ""}`}>
         <a className="brand" href="#top" aria-label="FlashFeast home">
           <span className="brandMark">
             <img src={appIcon} alt="FlashFeast" />
           </span>
           FlashFeast
         </a>
-        <nav aria-label="Primary navigation">
-          <a href="#restaurants">Restaurants</a>
-          <a href="#menu">Menu</a>
-          <a href="#tracking">Live tracking</a>
-        </nav>
-        <div className="navActions">
-          {user ? (
-            <div className="accountPill">
-              <span>
-                <User size={17} />
-                {user.name}
-              </span>
-              <button onClick={logout} aria-label="Logout">
-                <LogOut size={17} />
-              </button>
-            </div>
-          ) : (
-            <>
-              <button className="loginBtn" onClick={() => setAuthView("login")}>
-                <LogIn size={17} />
-                Login
-              </button>
-              <button className="signupBtn" onClick={() => setAuthView("signup")}>
-                <UserPlus size={17} />
-                Sign up
-              </button>
-            </>
-          )}
-          <a className="navCta" href="#checkout">
-            <ShoppingBag size={18} />
-            {cartItems.length}
-          </a>
+        <button
+          className="navMenuBtn"
+          type="button"
+          aria-label={mobileNavOpen ? "Close navigation menu" : "Open navigation menu"}
+          aria-expanded={mobileNavOpen}
+          aria-controls="primary-navigation"
+          onClick={() => setMobileNavOpen((current) => !current)}
+        >
+          {mobileNavOpen ? <X size={18} /> : <Menu size={18} />}
+          Menu
+        </button>
+        <div className="navPanel" id="primary-navigation">
+          <nav aria-label="Primary navigation">
+            <a href="#restaurants" onClick={closeMobileNav}>
+              Restaurants
+            </a>
+            <a href="#menu" onClick={closeMobileNav}>
+              Menu
+            </a>
+            <a href="#tracking" onClick={closeMobileNav}>
+              Live tracking
+            </a>
+          </nav>
+          <div className="navActions">
+            {user ? (
+              <div className="accountPill">
+                <span>
+                  <User size={17} />
+                  {user.name}
+                </span>
+                <button type="button" onClick={logout} aria-label="Logout">
+                  <LogOut size={17} />
+                </button>
+              </div>
+            ) : (
+              <>
+                <button
+                  type="button"
+                  className="loginBtn"
+                  onClick={() => setAuthView("login")}
+                >
+                  <LogIn size={17} />
+                  Login
+                </button>
+                <button
+                  type="button"
+                  className="signupBtn"
+                  onClick={() => setAuthView("signup")}
+                >
+                  <UserPlus size={17} />
+                  Sign up
+                </button>
+              </>
+            )}
+            <a className="navCta" href="#checkout" onClick={closeMobileNav}>
+              <ShoppingBag size={18} />
+              {cartItems.length}
+            </a>
+          </div>
         </div>
       </header>
 
@@ -2208,6 +2252,15 @@ function App() {
               }
               style={{ "--accent": restaurant.accent, "--delay": `${index * 90}ms` }}
               key={restaurant.name}
+              role="button"
+              tabIndex={0}
+              onClick={() => openRestaurantMenu(restaurant.name)}
+              onKeyDown={(event) => {
+                if (event.key === "Enter" || event.key === " ") {
+                  event.preventDefault();
+                  openRestaurantMenu(restaurant.name);
+                }
+              }}
             >
               <img
                 src={restaurant.image}
@@ -2228,7 +2281,11 @@ function App() {
                 </div>
                 <button
                   className="restaurantMenuBtn"
-                  onClick={() => openRestaurantMenu(restaurant.name)}
+                  type="button"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    openRestaurantMenu(restaurant.name);
+                  }}
                 >
                   View menu
                   <ChevronRight size={16} />
@@ -2252,6 +2309,71 @@ function App() {
               : "Order a clean plate from this kitchen"}
           </h2>
         </div>
+        {selectedRestaurantProfile && (
+          <article className="menuSpotlightCard" aria-label={`${selectedRestaurantProfile.name} menu`}> 
+            <div className="menuSpotlightVisual">
+              <img
+                src={selectedRestaurantProfile.image}
+                alt={selectedRestaurantProfile.name}
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+            <div className="menuSpotlightBody">
+              <div className="menuSpotlightHeader">
+                <span className="kicker">Dedicated menu</span>
+                <h3>{selectedRestaurantProfile.name}</h3>
+                <p>{selectedRestaurantProfile.tag}</p>
+              </div>
+              <div className="menuSpotlightMeta">
+                <span>
+                  <Star size={15} fill="currentColor" />
+                  {formatRating(selectedRestaurantProfile.rating)}
+                </span>
+                <span>
+                  <Clock3 size={15} />
+                  {selectedRestaurantProfile.eta}
+                </span>
+                <span>
+                  <Utensils size={15} />
+                  {selectedRestaurantProfile.menuCount} dishes
+                </span>
+              </div>
+              <div className="menuSpotlightItems">
+                {selectedRestaurantItems.slice(0, 4).map((item) => (
+                  <button
+                    key={item.id}
+                    type="button"
+                    className="menuSpotlightItem"
+                    onClick={() => updateCart(item.id, 1)}
+                  >
+                    <img src={item.image} alt={item.name} loading="lazy" decoding="async" />
+                    <span>
+                      <strong>{item.name}</strong>
+                      <small>{currency(item.price)}</small>
+                    </span>
+                  </button>
+                ))}
+              </div>
+              <div className="menuSpotlightActions">
+                <button
+                  type="button"
+                  className="menuSpotlightPrimary"
+                  onClick={() => setSelectedRestaurant("All nearby")}
+                >
+                  Back to all menus
+                </button>
+                <button
+                  type="button"
+                  className="menuSpotlightSecondary"
+                  onClick={() => document.getElementById("checkout")?.scrollIntoView({ behavior: "smooth" })}
+                >
+                  View cart
+                </button>
+              </div>
+            </div>
+          </article>
+        )}
         <div className="menuLayout">
           <div className="menuPanel">
             <div className="searchBar">
@@ -2287,7 +2409,19 @@ function App() {
             </div>
             <div className="menuGrid">
               {filteredMenu.map((item) => (
-                <article className="menuCard" key={item.id}>
+                <article
+                  className="menuCard"
+                  key={item.id}
+                  role="button"
+                  tabIndex={0}
+                  onClick={() => updateCart(item.id, 1)}
+                  onKeyDown={(event) => {
+                    if (event.key === "Enter" || event.key === " ") {
+                      event.preventDefault();
+                      updateCart(item.id, 1);
+                    }
+                  }}
+                >
                   <img src={item.image} alt={item.name} loading="lazy" decoding="async" />
                   <div className="menuInfo">
                     <span>{item.kitchen}</span>
@@ -2306,14 +2440,22 @@ function App() {
                       <strong>{currency(item.price)}</strong>
                       <div className="quantity">
                         <button
-                          onClick={() => updateCart(item.id, -1)}
+                          type="button"
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            updateCart(item.id, -1);
+                          }}
                           aria-label={`Remove ${item.name}`}
                         >
                           <Minus size={15} />
                         </button>
                         <span>{cart[item.id] || 0}</span>
                         <button
-                          onClick={() => updateCart(item.id, 1)}
+                          type="button"
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            updateCart(item.id, 1);
+                          }}
                           aria-label={`Add ${item.name}`}
                         >
                           <Plus size={15} />
