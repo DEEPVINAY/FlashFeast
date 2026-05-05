@@ -2022,37 +2022,37 @@ function App() {
   return (
     <>
       <main>
-      <DeferredParticles />
-      <Navbar
-        cartCount={cartItems.length}
-        user={user}
-        onLogin={() => setAuthView("login")}
-        onSignup={() => setAuthView("signup")}
-        onLogout={logout}
-      />
+        <DeferredParticles />
+        <Navbar
+          cartCount={cartItems.length}
+          user={user}
+          onLogin={() => setAuthView("login")}
+          onSignup={() => setAuthView("signup")}
+          onLogout={logout}
+        />
 
-      <HeroSection
-        locationLabel={locationLabel}
-        userCity={userCity}
-        slides={ingredientSlides}
-        activeIndex={activeIngredient}
-        setActiveIndex={setActiveIngredient}
-        setPaused={setSliderPaused}
-      />
+        <HeroSection
+          locationLabel={locationLabel}
+          userCity={userCity}
+          slides={ingredientSlides}
+          activeIndex={activeIngredient}
+          setActiveIndex={setActiveIngredient}
+          setPaused={setSliderPaused}
+        />
 
-      <section className="featureStrip" aria-label="Delivery promises">
-        {[
-          [Leaf, "Macro-balanced menus"],
-          [ShieldCheck, "Traceable sourcing"],
-          [Sparkles, "Gourmet plating"],
-          [Zap, "Live nutrition stats"]
-        ].map(([Icon, label]) => (
-          <div className="feature" key={label}>
-            <Icon size={21} />
-            <span>{label}</span>
-          </div>
-        ))}
-      </section>
+        <section className="featureStrip" aria-label="Delivery promises">
+          {[
+            [Leaf, "Macro-balanced menus"],
+            [ShieldCheck, "Traceable sourcing"],
+            [Sparkles, "Gourmet plating"],
+            [Zap, "Live nutrition stats"]
+          ].map(([Icon, label]) => (
+            <div className="feature" key={label}>
+              <Icon size={21} />
+              <span>{label}</span>
+            </div>
+          ))}
+        </section>
 
       <section className="section" id="restaurants">
         <div className="sectionHead">

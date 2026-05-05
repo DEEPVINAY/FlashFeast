@@ -33,7 +33,7 @@
   --accent-glow: 0 0 0 1px rgba(157, 200, 177, 0.5),
     0 16px 40px rgba(95, 138, 118, 0.25);
   --container-width: 1180px;
-  --container-pad: 1.25rem;
+  --container-pad: clamp(1rem, 5vw, 4rem);
   --glass-blur: 12px;
 }
 
