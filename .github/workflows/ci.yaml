@@ -44,8 +44,7 @@ jobs:
       - name: Setup SSH
         run: |
           mkdir -p ~/.ssh
-          cat <<EOF > ~/.ssh/gcp_key
-          ${{ secrets.SSH_KEY }}
+          echo "${{ secrets.SSH_KEY }}" > ~/.ssh/gcp_key
           EOF
 
           chmod 600 ~/.ssh/gcp_key
