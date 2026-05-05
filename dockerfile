@@ -1,4 +1,4 @@
-FROM node:20
+FROM node:18
 
 WORKDIR /app
 
@@ -9,6 +9,9 @@ COPY . .
 
 RUN npm run build
 
+# install production server
+RUN npm install -g serve
+
 EXPOSE 3000
 
-CMD ["npm", "run", "preview"]
+CMD ["serve", "-s", "dist", "-l", "3000"]
