@@ -9,8 +9,6 @@ COPY . .
 
 RUN npm run build
 
-# install production server
-RUN npm install -g serve
 
 EXPOSE 3000
 
