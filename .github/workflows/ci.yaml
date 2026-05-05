@@ -40,19 +40,18 @@ jobs:
 
           docker push ${{ secrets.DOCKER_USERNAME }}/food-delivery-app:${{ github.ref_name }}
           docker push ${{ secrets.DOCKER_USERNAME }}/food-delivery-app:${{ github.sha }}
+
       # 🔐 Setup SSH key
       - name: Setup SSH
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_KEY }}" > ~/.ssh/gcp_key
-          EOF
-
+          echo "${{ secrets.SSH_KEY }}" | tr -d '\r' > ~/.ssh/gcp_key
           chmod 600 ~/.ssh/gcp_key
 
-# 🚀 Deploy
+      # 🚀 Deploy
       - name: Deploy to VM
         run: |
-          ssh -i ~/.ssh/gcp_key -o StrictHostKeyChecking=no ${{ secrets.VM_USER }}@${{ secrets.VM_IP }} << 'EOF'
+          ssh -i ~/.ssh/gcp_key -o StrictHostKeyChecking=no ${{ secrets.VM_USER }}@${{ secrets.VM_IP }} << EOF
             echo "Pulling new version: ${{ github.ref_name }}..."
             docker pull ${{ secrets.DOCKER_USERNAME }}/food-delivery-app:${{ github.sha }}
 
@@ -60,11 +59,12 @@ jobs:
             docker stop app || true
             docker rm app || true
 
-            echo "Cleaning unused images (safe)..."
+            echo "Cleaning unused images..."
             docker image prune -f
 
             echo "Starting new container..."
             docker run -d -p 80:3000 --name app \
             ${{ secrets.DOCKER_USERNAME }}/food-delivery-app:${{ github.sha }}
+
             echo "Deployment of ${{ github.ref_name }} successful."
           EOF
