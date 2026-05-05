@@ -1,0 +1,565 @@
+/* HeroSection global styles for FlashFeast */
+.heroSection {
+  position: relative;
+  isolation: isolate;
+  z-index: 3;
+  width: 100%;
+  padding: clamp(1rem, 2.5vw, 2rem);
+  font-family: "Inter", "Geist", "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont,
+    sans-serif;
+  color: #102016;
+  pointer-events: none;
+}
+
+.heroSection :is(a, button, [role="button"]),
+.heroSection .heroDock,
+.heroSection .heroStage,
+.heroSection .heroCarousel {
+  pointer-events: auto;
+}
+
+.heroStage {
+  position: relative;
+  z-index: 50;
+  transform: none;
+  width: min(1220px, calc(100% - 2rem));
+  min-height: clamp(680px, 86vh, 860px);
+  margin: 0 auto;
+  padding: clamp(1.2rem, 3vw, 2rem);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(1.25rem, 2.6vw, 2rem);
+  border-radius: clamp(28px, 4vw, 44px);
+  border: 1px solid rgba(255, 255, 255, 0.42);
+  background:
+    radial-gradient(circle at top, rgba(240, 253, 244, 0.98) 0%, rgba(255, 255, 255, 0.92) 48%, rgba(238, 247, 242, 0.94) 100%);
+  box-shadow:
+    0 28px 90px rgba(15, 23, 42, 0.12),
+    0 10px 30px rgba(31, 41, 55, 0.08);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  overflow: hidden;
+}
+
+.heroStage::before,
+.heroStage::after {
+  position: absolute;
+  content: "";
+  inset: auto;
+  pointer-events: none;
+  border-radius: 999px;
+  filter: blur(2px);
+}
+
+.heroStage::before {
+  top: -80px;
+  left: -60px;
+  width: 280px;
+  height: 280px;
+  background: radial-gradient(circle, rgba(164, 217, 184, 0.3), transparent 70%);
+}
+
+.heroStage::after {
+  right: -80px;
+  bottom: -90px;
+  width: 320px;
+  height: 320px;
+  background: radial-gradient(circle, rgba(199, 228, 210, 0.32), transparent 70%);
+}
+
+.heroCopy {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.85rem;
+  width: min(100%, 780px);
+  padding-top: clamp(0.5rem, 1vw, 1rem);
+  text-align: center;
+}
+
+.heroEyebrow {
+  margin: 0;
+  padding: 0.48rem 0.82rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.34);
+  box-shadow: 0 10px 30px rgba(31, 38, 135, 0.08);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: #4b6356;
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.heroCopy h1 {
+  margin: 0;
+  font-size: clamp(2.4rem, 6vw, 5.9rem);
+  line-height: 0.92;
+  letter-spacing: -0.06em;
+}
+
+.heroLead {
+  margin: 0;
+  max-width: 62ch;
+  color: #526559;
+  font-size: clamp(1rem, 1.45vw, 1.2rem);
+  line-height: 1.75;
+}
+
+.heroInfoRow {
+  display: none;
+  position: relative;
+  z-index: 4;
+  width: min(100%, 760px);
+  margin: 0 auto;
+}
+
+.heroActions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.85rem;
+  padding-top: 0.25rem;
+}
+
+.heroButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-height: 50px;
+  padding: 0.85rem 1.2rem;
+  border-radius: 999px;
+  text-decoration: none;
+  font-size: 0.98rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
+}
+
+.heroButton--primary {
+  color: #ffffff;
+  background: linear-gradient(135deg, #4f8f74, #78b696);
+  box-shadow: 0 18px 30px rgba(79, 143, 116, 0.22);
+}
+
+.heroButton--secondary {
+  color: #102016;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.34);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 12px 28px rgba(31, 38, 135, 0.08);
+}
+
+.heroButton:hover {
+  transform: translateY(-2px);
+}
+
+.heroCarousel {
+  position: relative;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(0.8rem, 2vw, 1.4rem);
+  width: 100%;
+  padding: clamp(0.5rem, 2vw, 1.2rem) 0 clamp(6.5rem, 7vw, 7.5rem);
+  perspective: 1400px;
+}
+
+.heroCard {
+  position: relative;
+  z-index: 1;
+  flex: 0 0 auto;
+  width: clamp(180px, 22vw, 240px);
+  overflow: hidden;
+  border-radius: 28px;
+  border: 1px solid rgba(255, 255, 255, 0.32);
+  background: rgba(255, 255, 255, 0.72);
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.11);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  text-align: left;
+  color: inherit;
+  transform-origin: center bottom;
+  transition:
+    transform 220ms ease,
+    opacity 220ms ease,
+    box-shadow 220ms ease,
+    border-color 220ms ease;
+  cursor: pointer;
+}
+
+.heroCard:focus-visible {
+  outline: 3px solid rgba(79, 143, 116, 0.34);
+  outline-offset: 4px;
+}
+
+.heroCard--active {
+  width: clamp(270px, 33vw, 430px);
+  transform: translateY(-16px) scale(1.04);
+  z-index: 20;
+  box-shadow: 0 26px 60px rgba(15, 23, 42, 0.16);
+}
+
+.heroCard--prev,
+.heroCard--next {
+  opacity: 0.75;
+  transform: translateY(18px) scale(0.92);
+}
+
+.heroCard:hover,
+.heroCard:focus-visible {
+  opacity: 1;
+  border-color: rgba(127, 183, 152, 0.4);
+}
+
+.heroCardMedia {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+}
+
+.heroCardMedia img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.heroCardMedia::after {
+  position: absolute;
+  inset: 0;
+  content: "";
+  background: linear-gradient(180deg, rgba(8, 15, 10, 0.02), rgba(8, 15, 10, 0.24));
+}
+
+.heroCardChip {
+  position: absolute;
+  left: 0.9rem;
+  top: 0.9rem;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  padding: 0.42rem 0.65rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.74);
+  border: 1px solid rgba(255, 255, 255, 0.34);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: #2d4336;
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.heroCardBody {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  padding: clamp(1rem, 1.6vw, 1.35rem);
+}
+
+.heroCardTopline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  color: #668074;
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.heroCardTopline strong {
+  color: #102016;
+  font-size: 0.88rem;
+  letter-spacing: 0.18em;
+}
+
+.heroCardBody h2 {
+  margin: 0;
+  font-size: clamp(1.1rem, 2vw, 1.6rem);
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+}
+
+.heroCardBody p {
+  margin: 0;
+  color: #55675d;
+  font-size: 0.94rem;
+  line-height: 1.65;
+}
+
+.heroCardMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.heroCardMeta span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+  padding: 0.35rem 0.65rem;
+  border-radius: 999px;
+  background: rgba(243, 248, 244, 0.92);
+  border: 1px solid rgba(139, 173, 154, 0.18);
+  color: #3f5b4d;
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+}
+
+.heroBadge {
+  z-index: 10;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  max-width: 220px;
+  padding: 0.85rem 1rem;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.32);
+  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.1);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: all 0.3s ease-in-out;
+}
+
+.heroBadge--floating {
+  position: absolute;
+  pointer-events: none;
+}
+
+.heroBadge--inline {
+  position: relative;
+  width: fit-content;
+}
+
+.heroBadge svg {
+  flex: 0 0 auto;
+  color: #4f8f74;
+}
+
+.heroBadge span {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.heroBadge strong {
+  color: #102016;
+  font-size: 0.88rem;
+  letter-spacing: -0.02em;
+}
+
+.heroBadge small {
+  color: #597164;
+  font-size: 0.76rem;
+  line-height: 1.35;
+}
+
+.heroBadge--topLeft {
+  top: clamp(1rem, 2.5vw, 1.6rem);
+  left: clamp(1rem, 2.5vw, 1.6rem);
+}
+
+.heroBadge--bottomRight {
+  right: 5%;
+  bottom: 5%;
+}
+
+.heroDock {
+  position: absolute;
+  left: 50%;
+  bottom: clamp(1rem, 2.5vw, 1.6rem);
+  z-index: 999;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 0.7rem 0.8rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.74);
+  border: 1px solid rgba(255, 255, 255, 0.32);
+  box-shadow: 0 14px 34px rgba(31, 38, 135, 0.1);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transform: translateX(-50%);
+  pointer-events: auto;
+}
+
+.heroBackButton {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  color: #102016;
+  background: rgba(255, 255, 255, 0.88);
+  border: 1px solid rgba(17, 24, 39, 0.08);
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.heroBackButton::before {
+  position: absolute;
+  inset: -10px;
+  content: "";
+  border-radius: inherit;
+}
+
+.heroBackButton:hover {
+  transform: translateY(-1px);
+}
+
+.heroPagination {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.heroDot {
+  width: 10px;
+  height: 10px;
+  padding: 0;
+  border-radius: 999px;
+  background: rgba(95, 110, 102, 0.28);
+  box-shadow: inset 0 0 0 1px rgba(95, 110, 102, 0.08);
+  transition: width 180ms ease, background 180ms ease, transform 180ms ease;
+}
+
+.heroDot.active {
+  width: 28px;
+  background: linear-gradient(135deg, #4f8f74, #7bb39a);
+  transform: translateY(-1px);
+}
+
+@media (max-width: 900px) {
+  .heroStage {
+    width: min(100%, calc(100% - 1rem));
+  }
+
+  .heroCarousel {
+    gap: 0.9rem;
+  }
+
+  .heroCard--active {
+    width: min(100%, 390px);
+  }
+}
+
+@media (max-width: 768px) {
+  .heroStage {
+    min-height: auto;
+    padding: 1rem;
+  }
+
+  .heroCopy {
+    width: 100%;
+  }
+
+  .heroCopy h1 {
+    font-size: clamp(2.1rem, 12vw, 3.5rem);
+  }
+
+  .heroLead {
+    font-size: 0.98rem;
+  }
+
+  .heroInfoRow {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 0.15rem 0 0.35rem;
+  }
+
+  .heroInfoRow .heroBadge--inline:last-child {
+    display: none;
+  }
+
+  .heroBadge--inline {
+    flex: 1 1 170px;
+    max-width: 100%;
+    min-width: 0;
+    padding: 0.68rem 0.82rem;
+    box-shadow: 0 8px 24px rgba(31, 38, 135, 0.08);
+  }
+
+  .heroBadge--floating {
+    display: none;
+  }
+
+  .heroBadge--bottomRight {
+    display: flex;
+    position: static;
+    width: fit-content;
+    align-self: flex-end;
+    margin: 0.9rem 1rem 3.25rem 0;
+    transform: translateY(20px);
+  }
+
+  .heroCarousel {
+    padding-bottom: 5rem;
+  }
+
+  .heroCard--prev,
+  .heroCard--next {
+    display: none;
+  }
+
+  .heroCard--active {
+    width: min(100%, 430px);
+    transform: none;
+  }
+
+  .heroBadge {
+    max-width: 180px;
+    padding: 0.72rem 0.84rem;
+  }
+
+  .heroDock {
+    width: calc(100% - 1.4rem);
+    justify-content: center;
+  }
+
+  .heroBackButton {
+    width: 48px;
+    height: 48px;
+  }
+}
+
+@media (max-width: 520px) {
+  .heroStage {
+    gap: 1rem;
+  }
+
+  .heroCarousel {
+    padding-bottom: 4.5rem;
+  }
+
+  .heroDock {
+    gap: 0.65rem;
+    padding: 0.62rem 0.7rem;
+  }
+
+  .heroBackButton {
+    width: 46px;
+    height: 46px;
+  }
+
+  .heroPagination {
+    gap: 0.35rem;
+  }
+
+  .heroDot.active {
+    width: 24px;
+  }
+}

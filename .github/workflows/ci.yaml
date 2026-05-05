@@ -1,0 +1,69 @@
+name: CI pipeline
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests
+        run: npm test
+
+      - name: Build project
+        run: npm run build
+
+      - name: Build docker image
+        run: docker build -t food-delivery-app .
+
+      - name: Login to Docker Hub
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+      - name: Push Docker image
+        run: |
+          docker tag food-delivery-app ${{ secrets.DOCKER_USERNAME }}/food-delivery-app:latest
+          docker tag food-delivery-app ${{ secrets.DOCKER_USERNAME }}/food-delivery-app:${{ github.sha }}
+
+          docker push ${{ secrets.DOCKER_USERNAME }}/food-delivery-app:latest
+          docker push ${{ secrets.DOCKER_USERNAME }}/food-delivery-app:${{ github.sha }}
+      # 🔐 Setup SSH key
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          cat <<EOF > ~/.ssh/gcp_key
+          ${{ secrets.SSH_KEY }}
+          EOF
+
+          chmod 600 ~/.ssh/gcp_key
+
+# 🚀 Deploy
+      - name: Deploy to VM
+        run: |
+          ssh -i ~/.ssh/gcp_key -o StrictHostKeyChecking=no ${{ secrets.VM_USER }}@${{ secrets.VM_IP }} << 'EOF'
+            echo "Pulling new version..."
+            docker pull ${{ secrets.DOCKER_USERNAME }}/food-delivery-app:${{ github.sha }}
+
+            echo "Stopping old container..."
+            docker stop app || true
+            docker rm app || true
+
+            echo "Cleaning unused images (safe)..."
+            docker image prune -f
+
+            echo "Starting new container..."
+            docker run -d -p 80:3000 --name app \
+            ${{ secrets.DOCKER_USERNAME }}/food-delivery-app:${{ github.sha }}
+          EOF
