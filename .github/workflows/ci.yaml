@@ -2,7 +2,8 @@ name: CI pipeline
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - "version-*"
 
 jobs:
   build:
@@ -34,10 +35,10 @@ jobs:
 
       - name: Push Docker image
         run: |
-          docker tag food-delivery-app ${{ secrets.DOCKER_USERNAME }}/food-delivery-app:latest
+          docker tag food-delivery-app ${{ secrets.DOCKER_USERNAME }}/food-delivery-app:${{ github.ref_name }}
           docker tag food-delivery-app ${{ secrets.DOCKER_USERNAME }}/food-delivery-app:${{ github.sha }}
 
-          docker push ${{ secrets.DOCKER_USERNAME }}/food-delivery-app:latest
+          docker push ${{ secrets.DOCKER_USERNAME }}/food-delivery-app:${{ github.ref_name }}
           docker push ${{ secrets.DOCKER_USERNAME }}/food-delivery-app:${{ github.sha }}
       # 🔐 Setup SSH key
       - name: Setup SSH
@@ -53,7 +54,7 @@ jobs:
       - name: Deploy to VM
         run: |
           ssh -i ~/.ssh/gcp_key -o StrictHostKeyChecking=no ${{ secrets.VM_USER }}@${{ secrets.VM_IP }} << 'EOF'
-            echo "Pulling new version..."
+            echo "Pulling new version: ${{ github.ref_name }}..."
             docker pull ${{ secrets.DOCKER_USERNAME }}/food-delivery-app:${{ github.sha }}
 
             echo "Stopping old container..."
@@ -66,4 +67,5 @@ jobs:
             echo "Starting new container..."
             docker run -d -p 80:3000 --name app \
             ${{ secrets.DOCKER_USERNAME }}/food-delivery-app:${{ github.sha }}
+            echo "Deployment of ${{ github.ref_name }} successful."
           EOF
