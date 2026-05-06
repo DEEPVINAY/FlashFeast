@@ -47,7 +47,10 @@ FlashFeast is a streamlined food delivery web application built to demonstrate a
 The application is currently hosted and accessible at:
 👉 **[http://34.93.58.31/](http://34.93.58.31/)**[cite: 2]
 # Proof of Evidence of Whole Web application
-
+<img width="2880" height="1800" alt="image" src="https://github.com/user-attachments/assets/13ed770a-76a8-4d9b-a592-4b2d9976ebd0" />
+<img width="2880" height="1800" alt="image" src="https://github.com/user-attachments/assets/9de5e320-1caf-4188-84b3-d05285f0b12b" />
+<img width="2880" height="1800" alt="image" src="https://github.com/user-attachments/assets/ef1962e7-0f6d-4a28-962a-b1cbce2b3fdb" />
+<img width="2880" height="1800" alt="image" src="https://github.com/user-attachments/assets/fb74c85f-8568-4a1e-872b-ec54ea99c615" />
 ---
 
 ## 🛠 What's Under the Hood?
