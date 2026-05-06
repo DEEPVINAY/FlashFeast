@@ -24,7 +24,7 @@ Application goes live
 🧱 Project Lifecycle
 🧪 Building Stage (Local Setup)
 1. Clone Repository
-git clone https://github.com/your-username/flashfeast.git
+git clone [https://github.com/DEEPVINAY/FlashFeast.git]
 cd flashfeast
 2. Install Dependencies
 npm install
@@ -58,7 +58,7 @@ Frontend: React (Vite)
 Containerization: Docker
 CI/CD: GitHub Actions
 Cloud: Google Cloud Compute Engine
-OS: Debian / Linux
+OS: Ubuntu 26 LTS
 🔐 Security Improvements
 Before ❌
 Password-based SSH authentication
@@ -89,11 +89,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v3
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: 20
 
       - run: npm install
       - run: npm run build
@@ -167,11 +167,9 @@ FlashFeast/
 │── index.html
 │── package.json
 🔮 Future Enhancements
-Backend (Node.js + Express)
-Database (MongoDB / PostgreSQL)
-Authentication (JWT)
-Kubernetes deployment
-Monitoring (Prometheus + Grafana)
+UI Upgrades
+Authentication Animation 
+Hosting it on Google cloud Vm instance IP
 📌 Final Note
 
 FlashFeast is built as a DevOps-first project, demonstrating how modern applications move from code → container → cloud → production with minimal manual intervention.
