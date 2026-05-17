@@ -103,3 +103,4 @@ FlashFeast/
 1. User Authentication (Firebase Auth)
 2. Backend (Node.js or Express)
 3. Database (Cloud Sql or Firestore)
+4. Payment Gateway (Razorpay)
