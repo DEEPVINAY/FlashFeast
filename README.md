@@ -47,6 +47,7 @@ FlashFeast is a streamlined food delivery web application built to demonstrate a
 The application is currently hosted and accessible at:
 👉 **[http://34.93.58.31/](http://34.93.58.31/)**[cite: 2]
 # Proof of Evidence of Whole Web application
+
 ---
 
 ## 🛠 What's Under the Hood?
@@ -75,9 +76,6 @@ We used a modern stack to ensure the app is fast, responsive, and easy to manage
 ## 🚀 The Deployment Journey
 
 This project isn't just about the code; it's about the process[cite: 2]:
-
-
-
 1.  **Code & Push:** Changes are pushed to GitHub.
 2.  **Automated Build:** GitHub Actions automatically triggers a Docker build[cite: 2].
 3.  **Docker Hub:** The new image is tagged with a unique commit SHA and pushed to the registry[cite: 2].
@@ -85,7 +83,13 @@ This project isn't just about the code; it's about the process[cite: 2]:
 
 ---
 
-##📂 Project Structure
+## 🗺️ **Future Enhancements**
+1. User Authentication (Firebase Auth)
+2. Backend (Node.js or Express)
+3. Database (Cloud Sql or Firestore)
+4. Responsive UI/UX (Tailwind CSS)
+---
+## 📂 Project Structure
 ```bash
 FlashFeast/
 ├── .github/workflows/   # The "brain" of our automation pipeline
@@ -99,5 +103,3 @@ FlashFeast/
 1. User Authentication (Firebase Auth)
 2. Backend (Node.js or Express)
 3. Database (Cloud Sql or Firestore)
-4. Responsive UI/UX (Tailwind CSS)
-5. Payement Gateway (Razorpay)
