@@ -47,7 +47,6 @@ FlashFeast is a streamlined food delivery web application built to demonstrate a
 The application is currently hosted and accessible at:
 👉 **[http://34.93.58.31/](http://34.93.58.31/)**[cite: 2]
 # Proof of Evidence of Whole Web application
-
 ---
 
 ## 🛠 What's Under the Hood?
@@ -101,3 +100,4 @@ FlashFeast/
 2. Backend (Node.js or Express)
 3. Database (Cloud Sql or Firestore)
 4. Responsive UI/UX (Tailwind CSS)
+5. Payement Gateway (Razorpay)
