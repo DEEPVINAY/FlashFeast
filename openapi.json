@@ -1,0 +1,20 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "FlashFeast API",
+    "version": "1.0.0",
+    "description": "API specification for FlashFeast application"
+  },
+  "paths": {
+    "/menu": {
+      "get": {
+        "summary": "Get menu items",
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          }
+        }
+      }
+    }
+  }
+}
