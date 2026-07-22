@@ -90,14 +90,14 @@ jobs:
           gcloud compute ssh flash-feast \
             --zone=asia-south1-a \
             --command="
-              docker pull ${{ secrets.DOCKER_USERNAME }}/food-delivery-app:${{ github.sha }}
+              sudo docker pull ${{ secrets.DOCKER_USERNAME }}/food-delivery-app:${{ github.sha }}
 
-              docker stop app || true
-              docker rm app || true
+              sudo docker stop app || true
+              sudo docker rm app || true
 
-              docker image prune -af
+              sudo docker image prune -af
 
-              docker run -d \
+              sudo docker run -d \
                 --restart unless-stopped \
                 --name app \
                 -p 80:3000 \
