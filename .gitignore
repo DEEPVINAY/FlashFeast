@@ -2,3 +2,11 @@ node_modules/
 .env.local
 .env.example
 dist/
+# Terraform
+Terraform/.terraform/
+Terraform/*.tfstate
+Terraform/*.tfstate.*
+Terraform/*.tfvars
+Terraform/.terraform.lock.hcl
+Terraform/crash.log
+.DS_Store
