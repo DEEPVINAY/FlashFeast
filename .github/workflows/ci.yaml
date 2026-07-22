@@ -15,20 +15,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Set up Node
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 18
           cache: npm
 
-      - name: Install dependencies
-        run: npm ci
+      - run: npm ci
 
-      - name: Run tests
-        run: npm test
+      - run: npm test
 
   build-and-push:
     name: Build & Push Docker Image
@@ -36,23 +32,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Set up Node
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 18
           cache: npm
 
-      - name: Install dependencies
-        run: npm ci
+      - run: npm ci
 
-      - name: Build project
-        run: npm run build
+      - run: npm run build
 
-      - name: Build Docker image
-        run: docker build -t food-delivery-app .
+      - run: docker build -t food-delivery-app .
 
       - name: Login to Docker Hub
         run: |
@@ -60,12 +51,12 @@ jobs:
             -u "${{ secrets.DOCKER_USERNAME }}" \
             --password-stdin
 
-      - name: Tag Docker image
+      - name: Tag Images
         run: |
           docker tag food-delivery-app ${{ secrets.DOCKER_USERNAME }}/food-delivery-app:${{ github.ref_name }}
           docker tag food-delivery-app ${{ secrets.DOCKER_USERNAME }}/food-delivery-app:${{ github.sha }}
 
-      - name: Push Docker image
+      - name: Push Images
         run: |
           docker push ${{ secrets.DOCKER_USERNAME }}/food-delivery-app:${{ github.ref_name }}
           docker push ${{ secrets.DOCKER_USERNAME }}/food-delivery-app:${{ github.sha }}
@@ -76,49 +67,39 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Authenticate to Google Cloud
-        uses: google-github-actions/auth@v2
+        uses: google-github-actions/auth@v3
         with:
           workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
           service_account: ${{ secrets.SERVICE_ACCOUNT }}
 
       - name: Setup Google Cloud SDK
-        uses: google-github-actions/setup-gcloud@v2
+        uses: google-github-actions/setup-gcloud@v3
         with:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
 
-      - name: Configure project
+      - name: Verify Authentication
         run: |
-          gcloud config set project ${{ secrets.GCP_PROJECT_ID }}
+          gcloud auth list
+          gcloud config list
 
-      - name: Deploy application
+      - name: Deploy Application
         run: |
           gcloud compute ssh flash-feast \
             --zone=asia-south1-a \
             --command="
-              echo 'Pulling latest image...'
-
               docker pull ${{ secrets.DOCKER_USERNAME }}/food-delivery-app:${{ github.sha }}
-
-              echo 'Stopping old container...'
 
               docker stop app || true
               docker rm app || true
 
-              echo 'Cleaning old images...'
-
               docker image prune -af
-
-              echo 'Starting new container...'
 
               docker run -d \
                 --restart unless-stopped \
                 --name app \
                 -p 80:3000 \
                 ${{ secrets.DOCKER_USERNAME }}/food-delivery-app:${{ github.sha }}
-
-              echo 'Deployment completed successfully.'
             "
