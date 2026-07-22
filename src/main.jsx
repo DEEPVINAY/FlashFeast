@@ -206,11 +206,39 @@ function ParticleBackground() {
 
     resize();
 
-    let lastTime = performance.now();
+    let lastRenderTime = performance.now();
+    let frameCount = 0;
+    let startMeasureTime = performance.now();
+    let targetInterval = 1000 / 180; // default cap at 180Hz
+    let measuredFPS = null;
 
     function tick(time) {
-      const delta = Math.min(32, time - lastTime);
-      lastTime = time;
+      animationFrameId = window.requestAnimationFrame(tick);
+
+      // Measure device refresh rate dynamically over the first 30 frames
+      if (measuredFPS === null) {
+        frameCount++;
+        if (frameCount > 30) {
+          const elapsed = time - startMeasureTime;
+          const rawFPS = (frameCount * 1000) / elapsed;
+          const commonRates = [60, 75, 90, 120, 144, 165, 180, 240, 360];
+          const closest = commonRates.reduce((prev, curr) => 
+            Math.abs(curr - rawFPS) < Math.abs(prev - rawFPS) ? curr : prev
+          );
+          measuredFPS = Math.min(180, Math.max(60, closest));
+          targetInterval = 1000 / measuredFPS;
+        }
+      }
+
+      const elapsedSinceLastRender = time - lastRenderTime;
+      // Skip rendering if not enough time has passed (with 1ms tolerance for timer variation)
+      if (elapsedSinceLastRender < targetInterval - 1.0) {
+        return;
+      }
+
+      const delta = Math.min(32, elapsedSinceLastRender);
+      lastRenderTime = time;
+
       const pointer = pointerRef.current;
       if (pointer.active && time - pointer.lastMove > idleTimeout) {
         pointer.active = false;
@@ -273,8 +301,6 @@ function ParticleBackground() {
         ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
         ctx.fill();
       }
-
-      animationFrameId = window.requestAnimationFrame(tick);
     }
 
     animationFrameId = window.requestAnimationFrame(tick);
