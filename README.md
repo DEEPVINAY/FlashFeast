@@ -1,3 +1,5 @@
+# 🍛 FlashFeast (v1.0)
+
 Bringing your favorite meals to your doorstep, with a fully automated deployment behind it.
 
 FlashFeast is a food delivery web app built with React and Vite. You can browse restaurants and dishes, build a cart, and place orders. The real point of the project is the deployment side: the server is created with Terraform, and every push goes through an automated pipeline that tests the code, packages it in Docker, and ships it to a server on Google Cloud.
