@@ -45,7 +45,7 @@ FlashFeast is a streamlined food delivery web application built to demonstrate a
 
 ## 🌐 Live Demo
 The application is currently hosted and accessible at:
-👉 **[http://34.93.58.31/](http://34.93.58.31/)**[cite: 2]
+👉 **[http://34.93.58.31/](http://34.93.58.31/)**
 # Proof of Evidence of Whole Web application
 
 ---
