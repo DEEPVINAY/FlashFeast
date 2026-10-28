@@ -1,106 +1,92 @@
-# FlashFeast Version-01
-Flash Feast is a responsive food delivery web application built using React and Vite, offering users a seamless experience to browse food items and place orders. The project follows modern DevOps practices including Docker containerization and CI/CD automation, enabling fast and consistent deployments.
+# 🍕 FlashFeast (v1.0)
 
-## ⚙️ Running it Locally
+> Bringing your favorite meals to your doorstep, with a fully automated deployment behind it.
 
-Want to see how it works on your machine? Follow these steps:
+FlashFeast is a food delivery web app built with React and Vite. You can browse restaurants and dishes, build a cart, and place orders. The real point of the project is the deployment side: every push goes through an automated pipeline that tests the code, packages it in Docker, and ships it to a live server on Google Cloud.
 
-1.  **Clone the project:**
-    ```bash
-    git clone [https://github.com/DEEPVINAY/FlashFeast.git](https://github.com/DEEPVINAY/FlashFeast.git)
-    cd flashfeast
-    ```
+## Live Demo
 
-2.  **Install everything:**
-    ```bash
-    npm install
-    ```
+Try it here: **[http://34.93.58.31/](http://34.93.58.31/)**
 
-3.  **Set up your environment:**
-    Create a `.env` file and add your Firebase keys (see `.env.example`).
+<!-- Add 2 or 3 screenshots here (home page, cart, a green pipeline run) -->
 
-4.  **Launch:**
-    ```bash
-    npm run dev
-    ```
+## What's Under the Hood
 
----
+- **Frontend:** React (Vite)
+- **Styling:** Tailwind CSS
+- **Backend and data:** Firebase (Auth, Firestore, and Storage) for logins, menu data, and orders
+- **Containers:** Docker, using a multi stage build (Node builds the app, Nginx serves it)
+- **Hosting:** Google Cloud Platform, on a Compute Engine VM running Debian Linux
+- **Automation:** GitHub Actions for CI/CD
 
-## 🛤 What's Next? (v2)
+## Features
 
-While Version 1 covers the essentials, here is what we are looking at for the next release:
-*   **Payment Gateway:** Integrating Stripe or Razorpay for real transactions.
-*   **Live Map Tracking:** Watching your delivery driver move in real-time.
-*   **Restaurant Dashboard:** A dedicated portal for kitchen staff to manage incoming orders.
+- **Sign in:** Email or Google login
+- **Menu browsing:** Smooth, easy to explore restaurants and dishes
+- **Persistent cart:** Your cart stays put, even if you leave and come back
+- **Live order status:** Order updates in real time through Firebase
+- **Dark mode design:** A glassmorphism style look that works on phones and desktops
 
----
+## How It Gets Deployed
 
-**Developed by [Vinay](https://github.com/DEEPVINAY)**
-*Focusing on cloud, containers, and great food.*# 🍕 FlashFeast (v1.0)
-> **Bringing your favorite meals to your doorstep with cloud-speed efficiency.**
+Every push to a `version-*` branch kicks off a three stage pipeline:
 
-FlashFeast is a streamlined food delivery web application built to demonstrate a modern, automated deployment pipeline. This project serves as a practical showcase of how a React application moves from a local development environment to a containerized production server on Google Cloud[cite: 2].
+1. **Test:** Installs dependencies and runs `npm test`. If tests fail, nothing else runs.
+2. **Build and push:** Builds the Docker image and pushes it to Docker Hub, tagged with the branch name and the commit SHA.
+3. **Deploy:** Logs in to Google Cloud with keyless authentication (Workload Identity Federation), connects to the VM with `gcloud compute ssh`, pulls the new image, replaces the running container, and cleans up old images.
 
----
+Because every image is tagged with its commit SHA, each release is its own snapshot and nothing gets overwritten.
 
-## 🌐 Live Demo
-The application is currently hosted and accessible at:
-👉 **[http://34.93.58.31/](http://34.93.58.31/)**
-# Proof of Evidence of Whole Web application
+## Rolling Back
 
----
+If a release breaks, you don't need to rebuild anything. Run an older image on the VM:
 
-## 🛠 What's Under the Hood?
-
-We used a modern stack to ensure the app is fast, responsive, and easy to manage[cite: 1, 2]:
-
-*   **Frontend:** React (Vite) & TypeScript for a snappy user interface[cite: 1, 2].
-*   **Styling:** Tailwind CSS for a clean, modern look[cite: 1].
-*   **Backend & Data:** Firebase (Auth, Firestore, and Storage) handling everything from user logins to menu data[cite: 1, 2].
-*   **Containerization:** Docker to package the app so it runs the same way everywhere[cite: 2].
-*   **Cloud Hosting:** Google Cloud Platform (GCP) running on a Debian Linux VM[cite: 2].
-*   **Automation:** GitHub Actions for our CI/CD pipeline[cite: 2].
-
----
-
-## ✨ Key Features (v1)
-
-*   **Smart Authentication:** Users can sign in securely using Email or Google[cite: 1, 2].
-*   **Menu Browsing:** A smooth, interactive interface to explore restaurants and dishes[cite: 1, 2].
-*   **Persistent Cart:** Add items and manage your order without losing progress[cite: 1, 2].
-*   **Real-Time Updates:** Live order status tracking powered by Firebase[cite: 1, 2].
-*   **Modern Design:** A "Glassmorphism" inspired dark mode that looks great on mobile and desktop[cite: 1].
-
----
-
-## 🚀 The Deployment Journey
-
-This project isn't just about the code; it's about the process[cite: 2]:
-1.  **Code & Push:** Changes are pushed to GitHub.
-2.  **Automated Build:** GitHub Actions automatically triggers a Docker build[cite: 2].
-3.  **Docker Hub:** The new image is tagged with a unique commit SHA and pushed to the registry[cite: 2].
-4.  **Cloud Sync:** The pipeline securely SSHes into our Google Cloud VM, pulls the fresh image, and restarts the container[cite: 2].
-
----
-
-## 🗺️ **Future Enhancements**
-1. User Authentication (Firebase Auth)
-2. Backend (Node.js or Express)
-3. Database (Cloud Sql or Firestore)
-4. Responsive UI/UX (Tailwind CSS)
----
-## 📂 Project Structure
 ```bash
-FlashFeast/
-├── .github/workflows/   # The "brain" of our automation pipeline
-├── src/                 # All React components and logic
-├── public/              # Icons and images
-├── Dockerfile           # Instructions for packaging the app
-├── package.json         # Project settings
-└── README.md            # You are here!
+sudo docker stop app && sudo docker rm app
+sudo docker run -d --restart unless-stopped --name app -p 80:3000 \
+  <dockerhub-username>/food-delivery-app:<old-commit-sha>
+```
 
-## Future Enhancements
-1. User Authentication (Firebase Auth)
-2. Backend (Node.js or Express)
-3. Database (Cloud Sql or Firestore)
-4. Payment Gateway (Razorpay)
+## Running It Locally
+
+1. **Clone the project:**
+   ```bash
+   git clone https://github.com/DEEPVINAY/FlashFeast.git
+   cd FlashFeast
+   ```
+
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+
+3. **Set up your environment:** Create a `.env` file and add your Firebase keys (see `.env.example`).
+
+4. **Start it:**
+   ```bash
+   npm run dev
+   ```
+
+## Project Structure
+
+```
+FlashFeast/
+├── .github/workflows/   # The CI/CD pipeline
+├── src/                 # React components and logic
+├── public/              # Icons and images
+├── Dockerfile           # Multi stage build (Node, then Nginx)
+├── nginx.conf           # Nginx config used in the container
+├── package.json         # Project settings
+└── README.md            # You are here
+```
+
+## What's Next (v2)
+
+- **Payment gateway:** Stripe or Razorpay for real transactions
+- **Live map tracking:** Watch your delivery driver move in real time
+- **Restaurant dashboard:** A portal for kitchen staff to manage incoming orders
+- **Backend API:** Node.js or Express, with Cloud SQL or Firestore behind it
+
+---
+
+Built by [Vinay](https://github.com/DEEPVINAY). Focused on cloud, containers, and good food.
