@@ -1,40 +1,29 @@
 variable "gcp_project_id" {
-  description = "GCP project ID"
+  description = "GCP Project ID"
   type        = string
 }
 
 variable "gcp_region" {
-  description = "Default GCP region for the provider"
+  description = "GCP Region for Cloud Run"
   type        = string
-  default     = "us-central1"
+  default     = "asia-south1"
 }
 
-variable "gcp_zone" {
-  description = "GCP zone to deploy the VM into"
-  type        = string
-  default     = "us-central1-a"
-}
-
-variable "region" {
-  description = "Region for the reserved static IP"
-  type        = string
-  default     = "us-central1"
-}
-
-variable "vm_name" {
-  description = "Base name for the VM and related resources"
+variable "service_name" {
+  description = "Name of the Cloud Run service"
   type        = string
   default     = "flash-feast"
 }
 
-variable "machine_type" {
-  description = "Machine type for the VM"
+variable "container_image" {
+  description = "Docker image to deploy on Cloud Run"
   type        = string
-  default     = "e2-medium"
+  default     = "gcr.io/cloudrun/hello" # Placeholder until first CI/CD push
 }
 
-variable "ssh_source_ranges" {
-  description = "CIDR ranges allowed to SSH into the VM (restrict this to your own IP in production)"
-  type        = list(string)
-  default     = ["0.0.0.0/0"]
+variable "database_url" {
+  description = "Neon PostgreSQL DATABASE_URL connection string"
+  type        = string
+  sensitive   = true
+  default     = ""
 }
